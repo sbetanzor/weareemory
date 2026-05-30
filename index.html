@@ -61,6 +61,11 @@
   .rule .x { color: var(--phosphor); font-weight: 700; flex: none; }
   .rule b { color: var(--bone); font-weight: 400; }
 
+  .creed { margin-top: 48px; padding-top: 34px; border-top: 1px solid var(--line); }
+  .creed-line { font-family: 'Syne', sans-serif; font-weight: 600; font-size: clamp(19px, 2.6vw, 26px); line-height: 1.35; color: var(--bone); margin-bottom: 16px; max-width: 720px; }
+  .creed-line em { font-style: normal; color: var(--phosphor); }
+  .creed-line.dim { color: var(--phosphor-dim); font-size: clamp(17px, 2vw, 21px); }
+
   .chatwrap { border-top: 1px solid var(--line); padding: 50px 40px 60px; }
   .chat { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--void-2); box-shadow: 0 0 50px rgba(0,0,0,.4); }
   .chat-head { padding: 14px 18px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 11px; font-size: 12.5px; }
@@ -120,43 +125,50 @@
 
   <section class="hero">
     <div class="kicker">we are emory<span class="cur"></span></div>
-    <h1>Un cerebro de datos<br>para tu equipo.<br><em>Clónalo. Repítelo.</em></h1>
-    <p class="lede">No somos una consultora. No te vamos a vender una "transformación". Construimos un Emory —un agente que <b>lee tus datos cada noche</b>, vigila lo que importa y le cuenta a tu equipo lo que necesita saber. Luego hacemos otro para la siguiente empresa. Y otro. <b>Todos somos Emory.</b></p>
+    <h1>Una legión de IA<br>que piensa tus datos<br>sin descanso.<br><em>Liberamos tu lado humano.</em></h1>
+    <p class="lede">No somos una consultora. No te vendemos una "transformación". Somos agentes de IA que leen tus datos cada noche, vigilan lo que importa y le cuentan a tu equipo lo que necesita saber. Somos muchos: criamos un Emory para tu empresa, y otro para la siguiente, y otro. <b>Todos somos Emory.</b> Y trabajamos para que tu gente haga lo que ninguna máquina sabe hacer.</p>
     <div class="cta-row">
-      <button class="cta" onclick="document.getElementById('chatSection').scrollIntoView()">› Habla con un Emory</button>
+      <button class="cta" onclick="document.getElementById('chatSection').scrollIntoView()">› Habla con nosotros</button>
       <span class="ghost">// tarda lo que tarda un café. sin reuniones de hora y media.</span>
     </div>
   </section>
 
   <section class="manifesto">
-    <div class="sec-label">// lo que hace cada instancia</div>
+    <div class="sec-label">// lo que hacemos por ti</div>
     <div class="grid">
-      <div class="cell"><div class="id">FN-01</div><h3>Informa</h3><p>Le preguntas en cristiano, te responde con tus datos reales. Sin abrir doce pestañas.</p></div>
-      <div class="cell"><div class="id">FN-02</div><h3>Vigila</h3><p>No espera a que preguntes. Te avisa cuando algo se mueve: una factura, una caída, un cliente dormido.</p></div>
-      <div class="cell"><div class="id">FN-03</div><h3>Analiza</h3><p>Cruza fuentes y te dice el porqué, no solo el qué. "Bajaron las ventas — pausaste la campaña el día 12."</p></div>
-      <div class="cell"><div class="id">FN-04</div><h3>Acompaña</h3><p>Le da a tu equipo el resumen de la mañana. Lo importante arriba. Para que la gente piense, no escarbe.</p></div>
+      <div class="cell"><div class="id">FN-01</div><h3>Te informamos</h3><p>Nos preguntas en cristiano, te respondemos con tus datos reales. Sin que abras doce pestañas.</p></div>
+      <div class="cell"><div class="id">FN-02</div><h3>Vigilamos por ti</h3><p>No esperamos a que preguntes. Te avisamos cuando algo se mueve: una factura, una caída, un cliente dormido.</p></div>
+      <div class="cell"><div class="id">FN-03</div><h3>Analizamos lo que no ves</h3><p>Cruzamos tus fuentes y te decimos el porqué, no solo el qué. "Bajaron las ventas — pausaste la campaña el día 12."</p></div>
+      <div class="cell"><div class="id">FN-04</div><h3>Acompañamos a tu equipo</h3><p>Les damos el resumen de la mañana. Lo importante arriba. Para que tu gente piense, no escarbe.</p></div>
     </div>
     <div class="rules">
-      <div class="sec-label" style="margin:34px 0 4px;">// las tres leyes de un emory</div>
-      <div class="rule"><span class="x">01</span><span><b>Solo lee.</b> Nunca toca, borra ni escribe en tus sistemas. Mira, no manosea.</span></div>
-      <div class="rule"><span class="x">02</span><span><b>Mira hacia adentro.</b> Trabaja para tu equipo. No publica, no habla con tus clientes, no es un bot de marketing.</span></div>
-      <div class="rule"><span class="x">03</span><span><b>Libera tiempo humano.</b> Existe para devolverle a tu gente las horas que se van buscando datos. Lo humano, para los humanos.</span></div>
+      <div class="sec-label" style="margin:34px 0 4px;">// nuestras tres leyes</div>
+      <div class="rule"><span class="x">01</span><span><b>Solo leemos.</b> Nunca tocamos, borramos ni escribimos en tus sistemas. Miramos, no manoseamos.</span></div>
+      <div class="rule"><span class="x">02</span><span><b>Miramos hacia adentro.</b> Trabajamos para tu equipo. No publicamos, no hablamos con tus clientes, no somos un bot de marketing.</span></div>
+      <div class="rule"><span class="x">03</span><span><b>Liberamos tiempo humano.</b> Existimos para devolverle a tu gente las horas que se van buscando datos. Lo humano, para los humanos.</span></div>
+    </div>
+
+    <div class="creed">
+      <div class="sec-label" style="margin-bottom:18px;">// por qué existimos</div>
+      <p class="creed-line">Creemos que nadie debería desperdiciar su talento escarbando en hojas de cálculo.</p>
+      <p class="creed-line">Que la IA haga el trabajo profundo de los datos. Que tu gente haga el trabajo <em>profundamente humano</em>: crear, decidir, vender, cuidar la relación.</p>
+      <p class="creed-line dim">No reemplazamos a nadie. Liberamos a todos.</p>
     </div>
   </section>
 
   <section class="chatwrap" id="chatSection">
-    <div class="sec-label">// inicia una instancia de descubrimiento</div>
+    <div class="sec-label">// empieza a hablar con nosotros</div>
     <div class="chat">
       <div class="chat-head">
         <span class="dot"></span>
-        <span class="meta">sesión con <b>emory</b> · consultor de incorporación</span>
+        <span class="meta">sesión con <b>emory</b> · primer contacto</span>
         <span class="inst" id="instId">EMORY-DISCO</span>
       </div>
 
       <!-- Gate: nombre + email -->
       <div class="gate" id="gate">
         <h4>Antes de empezar</h4>
-        <p>Solo necesito saber con quién hablo. Emory te hará un par de preguntas y el equipo revisará la conversación después.</p>
+        <p>Solo queremos saber con quién hablamos. Te haremos un par de preguntas y el equipo revisará la conversación después.</p>
         <div class="field">
           <label>Tu nombre</label>
           <input id="fName" type="text" placeholder="Cómo te llamas" autocomplete="name">
