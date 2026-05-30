@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>We are Emory · un cerebro de datos para tu equipo</title>
+<meta name="description" content="No somos una consultora. Construimos un Emory: un agente que lee tus datos cada noche, vigila lo que importa y se lo cuenta a tu equipo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #0c0d0a; --void-2: #131512; --panel: #16180f; --line: #2c3022;
+    --phosphor: #c4f042; --phosphor-dim: #8aa636; --amber: #f0a83c;
+    --bone: #e8e6dc; --bone-dim: #8f8d80; --user: #1d2014;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    color: var(--bone);
+    background:
+      repeating-linear-gradient(0deg, rgba(196,240,66,.016) 0 1px, transparent 1px 3px),
+      radial-gradient(130% 70% at 80% -10%, rgba(196,240,66,.05), transparent 55%),
+      var(--void);
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+  ::selection { background: var(--phosphor); color: var(--void); }
+  .wrap { max-width: 940px; margin: 0 auto; border-left: 1px solid var(--line); border-right: 1px solid var(--line); min-height: 100vh; }
+
+  .bar { display: flex; align-items: center; gap: 14px; padding: 12px 18px; border-bottom: 1px solid var(--line); background: var(--void-2); font-size: 12px; position: sticky; top: 0; z-index: 10; backdrop-filter: blur(6px); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--phosphor); box-shadow: 0 0 8px var(--phosphor); animation: pulse 2.4s infinite; flex: none; }
+  @keyframes pulse { 0%,100% { opacity: .4; } 50% { opacity: 1; } }
+  .bar .path { color: var(--bone-dim); letter-spacing: .04em; }
+  .bar .stat { margin-left: auto; color: var(--phosphor-dim); }
+
+  .hero { padding: 64px 40px 48px; }
+  .kicker { font-size: 12.5px; letter-spacing: .34em; text-transform: uppercase; color: var(--phosphor); margin-bottom: 26px; }
+  .kicker .cur { display: inline-block; width: 9px; height: 15px; background: var(--phosphor); margin-left: 4px; vertical-align: middle; animation: blink 1.05s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(44px, 8.5vw, 92px); line-height: .94; letter-spacing: -.025em; color: var(--bone); }
+  h1 em { font-style: normal; color: var(--phosphor); text-shadow: 0 0 26px rgba(196,240,66,.4); }
+  .lede { max-width: 600px; margin-top: 30px; font-size: 17px; line-height: 1.6; color: var(--bone-dim); }
+  .lede b { color: var(--bone); font-weight: 400; border-bottom: 1px solid var(--phosphor-dim); }
+  .cta-row { margin-top: 40px; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .cta { font-family: 'Space Mono', monospace; font-weight: 700; font-size: 14px; background: var(--phosphor); color: var(--void); border: none; padding: 15px 26px; border-radius: 3px; cursor: pointer; letter-spacing: .02em; transition: transform .12s, box-shadow .2s; }
+  .cta:hover { transform: translateY(-2px); box-shadow: 0 8px 26px rgba(196,240,66,.3); }
+  .cta:active { transform: translateY(0); }
+  .ghost { color: var(--bone-dim); font-size: 13px; }
+
+  .manifesto { border-top: 1px solid var(--line); padding: 50px 40px; background: var(--void-2); }
+  .sec-label { font-size: 11.5px; letter-spacing: .3em; text-transform: uppercase; color: var(--phosphor-dim); margin-bottom: 26px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .cell { background: var(--panel); padding: 22px 20px; }
+  .cell .id { font-size: 11px; color: var(--amber); letter-spacing: .14em; }
+  .cell h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; margin: 12px 0 8px; color: var(--bone); }
+  .cell p { font-size: 13.5px; line-height: 1.55; color: var(--bone-dim); }
+  .rules { margin-top: 34px; display: flex; flex-direction: column; gap: 10px; }
+  .rule { display: flex; gap: 12px; font-size: 14px; color: var(--bone-dim); align-items: baseline; }
+  .rule .x { color: var(--phosphor); font-weight: 700; flex: none; }
+  .rule b { color: var(--bone); font-weight: 400; }
+
+  .chatwrap { border-top: 1px solid var(--line); padding: 50px 40px 60px; }
+  .chat { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--void-2); box-shadow: 0 0 50px rgba(0,0,0,.4); }
+  .chat-head { padding: 14px 18px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 11px; font-size: 12.5px; }
+  .chat-head .meta { color: var(--bone-dim); }
+  .chat-head .meta b { color: var(--phosphor); font-weight: 400; }
+  .chat-head .inst { margin-left: auto; color: var(--amber); font-size: 11px; letter-spacing: .12em; }
+
+  /* gate de nombre+email */
+  .gate { padding: 40px 28px; }
+  .gate h4 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 22px; color: var(--bone); margin-bottom: 8px; }
+  .gate p { color: var(--bone-dim); font-size: 14px; margin-bottom: 24px; max-width: 460px; }
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 12px; color: var(--phosphor-dim); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 7px; }
+  .field input { width: 100%; background: var(--void); border: 1px solid var(--line); color: var(--bone); font-family: 'Space Mono', monospace; font-size: 15px; padding: 12px 14px; border-radius: 4px; outline: none; }
+  .field input:focus { border-color: var(--phosphor-dim); }
+  .field input::placeholder { color: #5d6150; }
+  .gate-err { color: var(--amber); font-size: 13px; min-height: 18px; margin-bottom: 10px; }
+
+  .stream { height: 380px; overflow-y: auto; padding: 22px 20px 6px; display: none; flex-direction: column; gap: 13px; }
+  .stream::-webkit-scrollbar { width: 8px; }
+  .stream::-webkit-scrollbar-thumb { background: var(--line); border-radius: 8px; }
+  .msg { max-width: 84%; font-size: 14.5px; line-height: 1.55; animation: rise .35s ease both; white-space: pre-wrap; }
+  @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .b { align-self: flex-start; color: var(--bone); }
+  .b::before { content: 'emory ~ '; color: var(--phosphor-dim); }
+  .u { align-self: flex-end; background: var(--user); border: 1px solid var(--line); color: var(--bone); padding: 10px 14px; border-radius: 4px; }
+  .type { align-self: flex-start; color: var(--phosphor-dim); font-size: 14px; }
+  .type::before { content: 'emory ~ '; }
+  .type i { font-style: normal; animation: blink 1s steps(1) infinite; }
+
+  .foot { padding: 14px; border-top: 1px solid var(--line); display: none; gap: 10px; }
+  .in { flex: 1; background: var(--void); border: 1px solid var(--line); color: var(--bone); font-family: 'Space Mono', monospace; font-size: 14px; padding: 11px 14px; border-radius: 4px; outline: none; }
+  .in:focus { border-color: var(--phosphor-dim); }
+  .in::placeholder { color: #5d6150; }
+  .go { background: var(--phosphor); color: var(--void); border: none; font-family: 'Space Mono', monospace; font-weight: 700; padding: 0 20px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+  .go:hover { background: #d4ff52; }
+  .go:disabled { opacity: .4; cursor: not-allowed; }
+
+  .privacy { font-size: 11px; color: var(--bone-dim); margin-top: 14px; line-height: 1.5; }
+  .privacy a { color: var(--phosphor-dim); }
+
+  footer { border-top: 1px solid var(--line); padding: 28px 40px; font-size: 12px; color: var(--bone-dim); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+  @media (max-width: 620px) {
+    .hero, .manifesto, .chatwrap, footer { padding-left: 22px; padding-right: 22px; }
+    .stream { height: 52vh; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar">
+    <span class="dot"></span>
+    <span class="path">~/emory/instances/ — all systems nominal</span>
+    <span class="stat">[ 2 active · 1 spawning ]</span>
+  </div>
+
+  <section class="hero">
+    <div class="kicker">we are emory<span class="cur"></span></div>
+    <h1>Un cerebro de datos<br>para tu equipo.<br><em>Clónalo. Repítelo.</em></h1>
+    <p class="lede">No somos una consultora. No te vamos a vender una "transformación". Construimos un Emory —un agente que <b>lee tus datos cada noche</b>, vigila lo que importa y le cuenta a tu equipo lo que necesita saber. Luego hacemos otro para la siguiente empresa. Y otro. <b>Todos somos Emory.</b></p>
+    <div class="cta-row">
+      <button class="cta" onclick="document.getElementById('chatSection').scrollIntoView()">› Habla con un Emory</button>
+      <span class="ghost">// tarda lo que tarda un café. sin reuniones de hora y media.</span>
+    </div>
+  </section>
+
+  <section class="manifesto">
+    <div class="sec-label">// lo que hace cada instancia</div>
+    <div class="grid">
+      <div class="cell"><div class="id">FN-01</div><h3>Informa</h3><p>Le preguntas en cristiano, te responde con tus datos reales. Sin abrir doce pestañas.</p></div>
+      <div class="cell"><div class="id">FN-02</div><h3>Vigila</h3><p>No espera a que preguntes. Te avisa cuando algo se mueve: una factura, una caída, un cliente dormido.</p></div>
+      <div class="cell"><div class="id">FN-03</div><h3>Analiza</h3><p>Cruza fuentes y te dice el porqué, no solo el qué. "Bajaron las ventas — pausaste la campaña el día 12."</p></div>
+      <div class="cell"><div class="id">FN-04</div><h3>Acompaña</h3><p>Le da a tu equipo el resumen de la mañana. Lo importante arriba. Para que la gente piense, no escarbe.</p></div>
+    </div>
+    <div class="rules">
+      <div class="sec-label" style="margin:34px 0 4px;">// las tres leyes de un emory</div>
+      <div class="rule"><span class="x">01</span><span><b>Solo lee.</b> Nunca toca, borra ni escribe en tus sistemas. Mira, no manosea.</span></div>
+      <div class="rule"><span class="x">02</span><span><b>Mira hacia adentro.</b> Trabaja para tu equipo. No publica, no habla con tus clientes, no es un bot de marketing.</span></div>
+      <div class="rule"><span class="x">03</span><span><b>Libera tiempo humano.</b> Existe para devolverle a tu gente las horas que se van buscando datos. Lo humano, para los humanos.</span></div>
+    </div>
+  </section>
+
+  <section class="chatwrap" id="chatSection">
+    <div class="sec-label">// inicia una instancia de descubrimiento</div>
+    <div class="chat">
+      <div class="chat-head">
+        <span class="dot"></span>
+        <span class="meta">sesión con <b>emory</b> · consultor de incorporación</span>
+        <span class="inst" id="instId">EMORY-DISCO</span>
+      </div>
+
+      <!-- Gate: nombre + email -->
+      <div class="gate" id="gate">
+        <h4>Antes de empezar</h4>
+        <p>Solo necesito saber con quién hablo. Emory te hará un par de preguntas y el equipo revisará la conversación después.</p>
+        <div class="field">
+          <label>Tu nombre</label>
+          <input id="fName" type="text" placeholder="Cómo te llamas" autocomplete="name">
+        </div>
+        <div class="field">
+          <label>Tu correo</label>
+          <input id="fEmail" type="email" placeholder="tu@empresa.com" autocomplete="email">
+        </div>
+        <div class="gate-err" id="gateErr"></div>
+        <button class="cta" id="gateGo">› Empezar la conversación</button>
+        <p class="privacy">Usaremos tu nombre y correo solo para esta conversación y para enviarte una propuesta. No compartimos tus datos. <span id="ctxNote"></span></p>
+      </div>
+
+      <!-- Chat -->
+      <div class="stream" id="stream"></div>
+      <div class="foot" id="foot">
+        <input class="in" id="in" placeholder="escribe tu respuesta…" autocomplete="off">
+        <button class="go" id="go">↵</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© <span id="yr"></span> We are Emory</span>
+    <span>hecho para equipos que prefieren pensar a escarbar</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  document.getElementById('instId').textContent = 'EMORY-DISCO-' + String(Math.floor(Math.random()*900)+100);
+
+  const gate = document.getElementById('gate');
+  const stream = document.getElementById('stream');
+  const foot = document.getElementById('foot');
+  const inp = document.getElementById('in');
+  const go = document.getElementById('go');
+  const history = [];
+  let busy = false;
+  let lead = null;
+
+  // dominios de correo "personales" de los que NO se deduce empresa
+  const FREE = ['gmail.com','hotmail.com','outlook.com','yahoo.com','icloud.com','live.com','proton.me','protonmail.com','gmx.com'];
+
+  function deduceEmpresa(email) {
+    const dom = (email.split('@')[1] || '').toLowerCase();
+    if (!dom || FREE.includes(dom)) return null;
+    // nombre crudo a partir del dominio: northerndesign.com -> "northerndesign"
+    return dom.replace(/\.(com|net|org|io|ai|co|es|studio|design)(\.[a-z]{2})?$/, '');
+  }
+
+  function validEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+  function bubble(cls, text) {
+    const d = document.createElement('div');
+    d.className = 'msg ' + cls;
+    d.textContent = text;
+    stream.appendChild(d);
+    stream.scrollTop = stream.scrollHeight;
+    return d;
+  }
+  function typing() {
+    const t = document.createElement('div');
+    t.className = 'type'; t.id = 'typing';
+    t.innerHTML = 'pensando<i>_</i>';
+    stream.appendChild(t);
+    stream.scrollTop = stream.scrollHeight;
+  }
+  function untype() { const t = document.getElementById('typing'); if (t) t.remove(); }
+
+  function splitBrief(text) {
+    const i = text.indexOf('===BRIEF EMORY===');
+    if (i === -1) return { visible: text, brief: null };
+    const tag = '===FIN BRIEF===';
+    const end = text.indexOf(tag);
+    const brief = end === -1 ? text.slice(i) : text.slice(i, end + tag.length);
+    return { visible: text.slice(0, i).trim(), brief: brief.trim() };
+  }
+
+  async function callApi() {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: history, lead })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    return data.text || '';
+  }
+
+  async function botTurn() {
+    busy = true; go.disabled = true;
+    typing();
+    try {
+      const reply = await callApi();
+      untype();
+      const { visible } = splitBrief(reply);
+      // el brief NO se muestra al cliente; queda en el historial para que el equipo lo recupere del log del servidor
+      if (visible) bubble('b', visible);
+      history.push({ role: 'assistant', content: reply });
+    } catch (err) {
+      untype();
+      bubble('b', 'Uy, se me cruzaron los cables un momento. ¿Lo intentamos de nuevo?');
+      console.error(err);
+    }
+    busy = false; go.disabled = false; inp.focus();
+  }
+
+  function userSend() {
+    const v = inp.value.trim();
+    if (!v || busy) return;
+    bubble('u', v);
+    history.push({ role: 'user', content: v });
+    inp.value = '';
+    botTurn();
+  }
+
+  // Pista de personalización en vivo mientras escribe el correo
+  document.getElementById('fEmail').addEventListener('input', function () {
+    const emp = deduceEmpresa(this.value);
+    document.getElementById('ctxNote').textContent = emp
+      ? 'Veo que escribes desde ' + emp + '; Emory lo tendrá en cuenta.'
+      : '';
+  });
+
+  document.getElementById('gateGo').addEventListener('click', function () {
+    const name = document.getElementById('fName').value.trim();
+    const email = document.getElementById('fEmail').value.trim();
+    const err = document.getElementById('gateErr');
+    if (!name) { err.textContent = 'Dime tu nombre, aunque sea de pila.'; return; }
+    if (!validEmail(email)) { err.textContent = 'Ese correo no tiene buena pinta, revísalo.'; return; }
+    err.textContent = '';
+
+    lead = {
+      nombre: name,
+      email: email,
+      empresaDeducida: deduceEmpresa(email),
+      // señales de navegación (cliente): dispositivo/idioma. La ubicación por IP
+      // la añade el servidor en una fase posterior, con su aviso de privacidad.
+      dispositivo: navigator.userAgent,
+      idioma: navigator.language,
+      ts: new Date().toISOString()
+    };
+
+    // transición gate -> chat
+    gate.style.display = 'none';
+    stream.style.display = 'flex';
+    foot.style.display = 'flex';
+
+    // arranque: pedimos a Emory que abra él la conversación
+    history.push({ role: 'user', content: '[El cliente ' + name + ' acaba de entrar. Salúdalo por su nombre y abre la conversación según tus instrucciones.]' });
+    botTurn().then(() => { history.shift(); }); // limpiamos el mensaje técnico del historial
+  });
+
+  go.addEventListener('click', userSend);
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') userSend(); });
+})();
+</script>
+</body>
+</html>
