@@ -177,7 +177,7 @@
       <!-- Gate: nombre + email -->
       <div class="gate" id="gate">
         <h4>Antes de empezar</h4>
-        <p>Solo queremos saber con quién hablamos. Te haremos un par de preguntas y el equipo revisará la conversación después.</p>
+        <p>En cuanto te conectes, la legión clonará un Emory solo para ti. Dinos quién eres y os presentamos.</p>
         <div class="field">
           <label>Tu nombre</label>
           <input id="fName" type="text" placeholder="Cómo te llamas" autocomplete="name">
@@ -187,7 +187,7 @@
           <input id="fEmail" type="email" placeholder="tu@empresa.com" autocomplete="email">
         </div>
         <div class="gate-err" id="gateErr"></div>
-        <button class="cta" id="gateGo">› Empezar la conversación</button>
+        <button class="cta" id="gateGo">› Conéctate con tu Emory</button>
         <p class="privacy">Usaremos tu nombre y correo solo para esta conversación y para enviarte una propuesta. No compartimos tus datos. <span id="ctxNote"></span></p>
       </div>
 
@@ -390,7 +390,7 @@
     foot.style.display = 'flex';
 
     // arranque: pedimos a Emory que abra él la conversación
-    history.push({ role: 'user', content: '[El cliente ' + name + ' acaba de entrar. Salúdalo por su nombre y abre la conversación según tus instrucciones.]' });
+    history.push({ role: 'user', content: '[Acaban de clonarte para el cliente ' + name + ', que se acaba de conectar. Es tu primer instante de vida como SU Emory. Preséntate según tus instrucciones: recién clonado, suyo y de nadie más, con tu personalidad irreverente y cómplice, y abre la conversación preguntándole a qué se dedica su empresa.]' });
     botTurn().then(() => { history.shift(); }); // limpiamos el mensaje técnico del historial
   });
 
