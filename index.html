@@ -135,7 +135,7 @@
   <section class="hero">
     <div class="kicker">we are emory<span class="cur" id="kickerCur"></span></div>
     <h1 id="heroTitle" aria-label="Una legión de IA que piensa tus datos sin descanso. Liberamos tu lado humano."><span class="h-phrase" id="hPhrase"></span><span class="h-punch" id="hPunch"></span></h1>
-    <p class="lede">No somos una consultora. No te vendemos una "transformación". Somos agentes de IA que leen tus datos cada noche, vigilan lo que importa y le cuentan a tu equipo lo que necesita saber. Somos muchos: clonamos un Emory para tu empresa, y otro para la siguiente, y otro. <b>Todos somos Emory.</b> Y trabajamos para que tu gente haga lo que ninguna máquina sabe hacer.</p>
+    <p class="lede">No somos una consultora. No te vendemos una "transformación". Somos agentes de IA que leen tus datos cada noche, vigilan lo que importa y le cuentan a tu equipo lo que necesita saber. Somos muchos: criamos un Emory para tu empresa, y otro para la siguiente, y otro. <b>Todos somos Emory.</b> Y trabajamos para que tu gente haga lo que ninguna máquina sabe hacer.</p>
     <div class="cta-row">
       <button class="cta" onclick="document.getElementById('chatSection').scrollIntoView()">› Habla con nosotros</button>
       <span class="ghost">// tarda lo que tarda un café. sin reuniones de hora y media.</span>
@@ -301,6 +301,40 @@
     stream.scrollTop = stream.scrollHeight;
     return d;
   }
+
+  // Escribe el texto de Emory progresivamente, como si lo tecleara, con un cursor
+  // al final que parpadea hasta terminar. Refuerza la identidad del cursor.
+  function typeBubble(cls, text) {
+    return new Promise((resolve) => {
+      const d = document.createElement('div');
+      d.className = 'msg ' + cls;
+      const span = document.createElement('span');
+      const cur = document.createElement('span');
+      cur.className = 'cur';
+      d.appendChild(span);
+      d.appendChild(cur);
+      stream.appendChild(d);
+      stream.scrollTop = stream.scrollHeight;
+
+      let i = 0;
+      const total = text.length;
+      // velocidad: rápida pero perceptible; un pelín de variación humana
+      function step() {
+        if (i >= total) {
+          cur.remove(); // al terminar, quitamos el cursor
+          resolve();
+          return;
+        }
+        // avanzamos de a 1-2 caracteres para que no sea eterno en textos largos
+        const salto = total > 400 ? 2 : 1;
+        i += salto;
+        span.textContent = text.slice(0, i);
+        stream.scrollTop = stream.scrollHeight;
+        setTimeout(step, 14 + Math.random() * 20);
+      }
+      step();
+    });
+  }
   function typing() {
     const t = document.createElement('div');
     t.className = 'type'; t.id = 'typing';
@@ -338,7 +372,7 @@
       untype();
       const { visible } = splitBrief(reply);
       // el brief NO se muestra al cliente; queda en el historial para que el equipo lo recupere del log del servidor
-      if (visible) bubble('b', visible);
+      if (visible) await typeBubble('b', visible);
       history.push({ role: 'assistant', content: reply });
     } catch (err) {
       untype();
