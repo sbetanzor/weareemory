@@ -177,7 +177,7 @@ export async function onRequestPost(context) {
         },
         body: JSON.stringify({
           model: 'claude-opus-4-8',
-          max_tokens: 1500,
+          max_tokens: 4000,
           system,
           tools,
           messages: convo,
