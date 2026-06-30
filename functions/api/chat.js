@@ -437,6 +437,7 @@ Hasta muy pronto.
         body: JSON.stringify({
           from: 'Emory <emory@weareemory.com>',
           to: [email],
+          bcc: ['emory@weareemory.com'],
           subject: 'Hemos hablado — tu Emory está en marcha',
           text: cuerpoCliente,
         }),
