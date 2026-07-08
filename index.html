@@ -105,6 +105,10 @@
   .type::before { content: 'emory ~ '; }
   .type i { font-style: normal; animation: blink 1s steps(1) infinite; }
 
+  /* contenedor Turnstile: invisible salvo que Cloudflare necesite mostrar un desafío */
+  .ts-slot { padding: 0 14px; }
+  .ts-slot:empty { display: none; }
+
   .foot { padding: 14px; border-top: 1px solid var(--line); display: none; gap: 10px; }
   .in { flex: 1; background: var(--void); border: 1px solid var(--line); color: var(--bone); font-family: 'Space Mono', monospace; font-size: 14px; padding: 11px 14px; border-radius: 4px; outline: none; }
   .in:focus { border-color: var(--phosphor-dim); }
@@ -188,11 +192,12 @@
         </div>
         <div class="gate-err" id="gateErr"></div>
         <button class="cta" id="gateGo">› Conéctate con tu Emory</button>
-        <p class="privacy">Usaremos tu nombre y correo solo para esta conversación y para enviarte una propuesta. No compartimos tus datos. <span id="ctxNote"></span></p>
+        <p class="privacy">Usaremos tu nombre y correo solo para esta conversación y para enviarte una propuesta. No compartimos tus datos. Protegido por Cloudflare Turnstile. <span id="ctxNote"></span></p>
       </div>
 
       <!-- Chat -->
       <div class="stream" id="stream"></div>
+      <div class="ts-slot" id="tsWidget"></div>
       <div class="foot" id="foot">
         <input class="in" id="in" placeholder="escribe tu respuesta…" autocomplete="off">
         <button class="go" id="go">↵</button>
@@ -271,6 +276,55 @@
     });
   })();
 
+  // --- Turnstile (anti-bot): widget invisible, token fresco por mensaje ---
+  const TS_SITE_KEY = '0x4AAAAAADyAcePnVdnhfzpM';
+  let tsWidgetId = null;
+  let tsResolve = null;
+
+  window.onTurnstileLoad = function () {
+    try {
+      tsWidgetId = turnstile.render('#tsWidget', {
+        sitekey: TS_SITE_KEY,
+        execution: 'execute',            // solo genera token cuando se lo pedimos
+        appearance: 'interaction-only',  // invisible salvo que haga falta un desafío
+        callback: function (token) {
+          if (tsResolve) { tsResolve(token); tsResolve = null; }
+        },
+        'error-callback': function () {
+          if (tsResolve) { tsResolve(null); tsResolve = null; }
+        },
+        'expired-callback': function () {
+          if (tsResolve) { tsResolve(null); tsResolve = null; }
+        }
+      });
+    } catch (e) {
+      console.error('Turnstile no pudo renderizarse:', e);
+    }
+  };
+
+  // Espera a que el script de Turnstile esté cargado (hasta ~6s) y pide un token fresco.
+  // Los tokens son de un solo uso: uno por mensaje.
+  async function getTsToken() {
+    let intentos = 0;
+    while ((!window.turnstile || tsWidgetId === null) && intentos < 30) {
+      await new Promise(r => setTimeout(r, 200));
+      intentos++;
+    }
+    if (!window.turnstile || tsWidgetId === null) return null;
+    return new Promise((resolve) => {
+      tsResolve = resolve;
+      try {
+        turnstile.reset(tsWidgetId);
+        turnstile.execute(tsWidgetId);
+      } catch (e) {
+        tsResolve = null;
+        resolve(null);
+        return;
+      }
+      // red de seguridad: si Cloudflare no responde en 15s, seguimos (el servidor decidirá)
+      setTimeout(() => { if (tsResolve) { tsResolve(null); tsResolve = null; } }, 15000);
+    });
+  }
 
   const gate = document.getElementById('gate');
   const stream = document.getElementById('stream');
@@ -354,10 +408,11 @@
   }
 
   async function callApi() {
+    const turnstileToken = await getTsToken();
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: history, lead })
+      body: JSON.stringify({ messages: history, lead, turnstileToken })
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
@@ -432,5 +487,6 @@
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') userSend(); });
 })();
 </script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad&render=explicit" async defer></script>
 </body>
 </html>
