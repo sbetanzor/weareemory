@@ -143,6 +143,13 @@ export async function onRequestPost(context) {
     region: cf.region || null,
   };
 
+  // ¿Este visitante ya es conocido? (prospecto o cliente registrado en el servidor)
+  // Consulta al intake por su email; si el servidor no responde, seguimos como visitante nuevo.
+  let reconocido = null;
+  if (lead && lead.email) {
+    reconocido = await consultarLead(lead.email, env);
+  }
+
   // Si llega info del lead, la inyectamos como nota de sistema para que Emory
   // pueda saludar con contexto. De momento solo nombre/empresa deducida.
   let system = SYSTEM_PROMPT;
@@ -150,6 +157,25 @@ export async function onRequestPost(context) {
     system += `\n\nCONTEXTO DE ESTE VISITANTE (úsalo con tacto, insinuando, nunca afirmando con seguridad):`;
     if (lead.nombre) system += `\n- Nombre: ${lead.nombre}`;
     if (lead.empresaDeducida) system += `\n- Por el dominio de su correo parece que trabaja en: ${lead.empresaDeducida}. NO lo afirmes como hecho; pregúntalo con suavidad ("¿voy bien?").`;
+  }
+
+  // Visitante RECONOCIDO: ya existe relación con su empresa. Emory cambia de modo.
+  if (reconocido) {
+    const esActivo = (reconocido.estado || '').toLowerCase() === 'activo';
+    system += `\n\nVISITANTE RECONOCIDO (dato confirmado por el servidor — esto SÍ puedes afirmarlo):
+- Su empresa ya tiene relación con la legión: ${reconocido.empresa || 'empresa registrada'}.
+- Contacto previo registrado: ${reconocido.contacto_previo || '(sin nombre)'}
+- Estado de la relación: ${reconocido.estado || 'prospecto'}${esActivo ? ' (YA ES CLIENTE: su Emory está operativo)' : ' (ya recibió una propuesta por correo)'}
+- Último contacto: ${reconocido.ultimo_contacto || '(sin fecha)'}
+CÓMO ACTÚAS EN ESTE MODO:
+- Salúdale reconociendo la relación con naturalidad y calidez, sin sonar a vigilancia. Si el contacto previo es otra persona de su empresa, nómbrala con el espíritu de "veo que trabajas junto a X en ${reconocido.empresa || 'tu empresa'}".
+- NO repitas el ciclo completo de captación ni el cierre épico: la relación ya existe y vive en el correo.
+- Resuelve sus dudas puntuales aquí mismo, con tu criterio de siempre.
+${esActivo
+  ? '- Como ya es cliente, encamina cualquier petición de trabajo a su canal natural: que escriba a su Emory por correo (emory@weareemory.com), donde tienes sus datos y memoria completa.'
+  : `- Encamina la conversación a que responda al correo de su propuesta: ahí vive la relación y ahí tienes memoria completa.
+- Si dice que no encuentra la propuesta o pide que se la reenvíes, confírmaselo con naturalidad ("te la acabo de reenviar, revisa tu bandeja — y spam, que a veces se esconde") y AÑADE al final de ESE MISMO mensaje, en una línea sola, el marcador exacto: ===REENVIAR PROPUESTA=== — el sistema lo detecta, ejecuta el reenvío de verdad y el visitante no verá el marcador. NO lo emitas si no ha pedido el reenvío ni lo prometas sin emitirlo.`}
+- En este modo NO generes el brief de cierre, SALVO que la conversación aporte información nueva y sustancial sobre su negocio (nuevo dolor, nueva fuente de datos, nuevo decisor); en ese caso ciérrala con brief normal, que el sistema la anexará a su expediente.`;
   }
 
   // Herramienta que Emory puede invocar para leer la web del cliente
@@ -228,18 +254,80 @@ export async function onRequestPost(context) {
 
     const text = finalText;
 
+    // Marcador de reenvío de propuesta (visitante reconocido que la pide):
+    // se ejecuta el reenvío en el servidor y se borra el marcador del texto visible.
+    const MARCA_REENVIO = '===REENVIAR PROPUESTA===';
+    let textoVisible = text;
+    if (text.includes(MARCA_REENVIO)) {
+      textoVisible = text.split(MARCA_REENVIO).join('').trim();
+      if (lead && lead.email) {
+        context.waitUntil(solicitarReenvio(lead.email, env));
+      } else {
+        console.error('Marcador de reenvío sin email de lead: no se puede reenviar.');
+      }
+    }
+
     // Si la respuesta contiene el brief de cierre, procesamos el cierre:
     //  (1) enviamos el brief + la conversación completa por correo (no se pierde),
-    //  (2) depositamos el LEAD en el servidor (memoria inicial, conversación íntegra).
+    //  (2) depositamos el LEAD en el servidor (el intake deduplica: anexa si ya existe).
     if (text.includes('===BRIEF EMORY===')) {
       // no bloqueamos la respuesta al cliente por estas tareas de fondo
       context.waitUntil(enviarBriefPorCorreo(text, lead, convo, env));
       context.waitUntil(enviarLeadAlServidor(text, lead, geo, convo, env));
     }
 
-    return json({ text }, 200, cors);
+    return json({ text: textoVisible }, 200, cors);
   } catch (err) {
     return json({ error: 'No se pudo conectar con Anthropic: ' + err.message }, 502, cors);
+  }
+}
+
+// Consulta al intake si un email pertenece a un prospecto/cliente ya registrado.
+// Devuelve el objeto {conocido, cliente, empresa, contacto_previo, estado, ultimo_contacto}
+// o null (desconocido o servidor sin responder — en ese caso el chat sigue como visitante nuevo).
+async function consultarLead(email, env) {
+  try {
+    if (!email || !env.INTAKE_TOKEN) return null;
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 4000);
+    const r = await fetch('https://intake.weareemory.com/lead/lookup', {
+      method: 'POST',
+      signal: ctrl.signal,
+      headers: {
+        'Authorization': `Bearer ${env.INTAKE_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+    clearTimeout(t);
+    if (!r.ok) return null;
+    const d = await r.json();
+    return d && d.conocido ? d : null;
+  } catch (err) {
+    console.error('Lookup de lead falló (se sigue como visitante nuevo):', err.message);
+    return null;
+  }
+}
+
+// Pide al intake que reenvíe la propuesta ya enviada al email del solicitante.
+// El servidor resuelve el E_NNNN desde el email (nadie puede pedir la de otro). Falla en silencio.
+async function solicitarReenvio(email, env) {
+  try {
+    if (!email || !env.INTAKE_TOKEN) return;
+    const r = await fetch('https://intake.weareemory.com/lead/reenviar', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${env.INTAKE_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+    const d = await r.json().catch(() => null);
+    if (!r.ok || !d || d.ok !== true) {
+      console.error('Reenvío de propuesta no ejecutado:', r.status, JSON.stringify(d));
+    }
+  } catch (err) {
+    console.error('Error solicitando reenvío:', err.message);
   }
 }
 
@@ -292,7 +380,9 @@ function empresaDesdeBrief(brief) {
 }
 
 // Deposita el lead en el servidor (intake.weareemory.com): crea el prospecto
-// clientes/E_NNNN/ con la conversación íntegra, el brief y los metadatos. Falla en silencio.
+// clientes/E_NNNN/ con la conversación íntegra, el brief y los metadatos —
+// o, si el email/dominio ya existe, anexa la conversación al expediente existente.
+// Falla en silencio.
 async function enviarLeadAlServidor(fullText, lead, geo, convo, env) {
   try {
     if (!env.INTAKE_TOKEN) { console.error('Falta INTAKE_TOKEN'); return; }
