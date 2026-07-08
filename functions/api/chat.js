@@ -103,7 +103,7 @@ decisiones_clave:
 fuentes_datos_mencionadas:
 accesos_posibles:
 ideas_que_les_entusiasmaron:
-reacción_al_precio: (si se mencionó el 250€/mes y cómo reaccionó)
+reacción_al_precio: (si se mencionó el precio y cómo reaccionó)
 señales_de_viabilidad:
 preguntas_abiertas_para_el_senior:
 ===FIN BRIEF===`;
@@ -229,11 +229,11 @@ export async function onRequestPost(context) {
     const text = finalText;
 
     // Si la respuesta contiene el brief de cierre, procesamos el cierre:
-    //  (1) enviamos el brief por correo (no se pierde),
+    //  (1) enviamos el brief + la conversación completa por correo (no se pierde),
     //  (2) depositamos el LEAD en el servidor (memoria inicial, conversación íntegra).
     if (text.includes('===BRIEF EMORY===')) {
       // no bloqueamos la respuesta al cliente por estas tareas de fondo
-      context.waitUntil(enviarBriefPorCorreo(text, lead, env));
+      context.waitUntil(enviarBriefPorCorreo(text, lead, convo, env));
       context.waitUntil(enviarLeadAlServidor(text, lead, geo, convo, env));
     }
 
@@ -291,8 +291,8 @@ function empresaDesdeBrief(brief) {
   return m && m[1].trim() ? m[1].trim() : '';
 }
 
-// Deposita el lead en el servidor (intake.weareemory.com): crea leads/L_NNNN/
-// con la conversación íntegra, el brief y los metadatos. Falla en silencio.
+// Deposita el lead en el servidor (intake.weareemory.com): crea el prospecto
+// clientes/E_NNNN/ con la conversación íntegra, el brief y los metadatos. Falla en silencio.
 async function enviarLeadAlServidor(fullText, lead, geo, convo, env) {
   try {
     if (!env.INTAKE_TOKEN) { console.error('Falta INTAKE_TOKEN'); return; }
@@ -375,9 +375,11 @@ async function leerWeb(url) {
   }
 }
 
-// Extrae el brief y lo envía por correo vía Resend (a ti) y manda una confirmación
-// al cliente. Falla en silencio (logs) para no romper la conversación.
-async function enviarBriefPorCorreo(fullText, lead, env) {
+// Extrae el brief y lo envía por correo vía Resend (a emory@), junto con la
+// TRANSCRIPCIÓN COMPLETA de la conversación (visibilidad sin supervisión), y
+// manda una confirmación al cliente. Falla en silencio (logs) para no romper
+// la conversación.
+async function enviarBriefPorCorreo(fullText, lead, convo, env) {
   try {
     if (!env.RESEND_API_KEY) { console.error('Falta RESEND_API_KEY'); return; }
     const brief = extraerBrief(fullText);
@@ -388,6 +390,7 @@ async function enviarBriefPorCorreo(fullText, lead, env) {
     const email = lead && lead.email ? lead.email : '—';
     const dispositivo = lead && lead.dispositivo ? lead.dispositivo : '—';
     const idioma = lead && lead.idioma ? lead.idioma : '—';
+    const transcripcion = construirTranscripcion(Array.isArray(convo) ? convo : []);
     const asunto = `BRIEF / ${empresa}`;
     const cuerpo =
 `Nueva conversación cerrada con un Emory.
@@ -398,8 +401,12 @@ async function enviarBriefPorCorreo(fullText, lead, env) {
 
 ${brief}
 
+=== CONVERSACIÓN COMPLETA ===
+
+${transcripcion || '(sin transcripción disponible)'}
+
 ——
-Para generar la propuesta: pega este brief en el Proyecto "Emory · Propuestas" (E_doc).`;
+La propuesta se genera y envía automáticamente; su copia llegará a este buzón por BCC.`;
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
