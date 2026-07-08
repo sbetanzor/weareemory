@@ -129,6 +129,19 @@ export async function onRequestPost(context) {
     return json({ error: 'Cuerpo de la petición inválido.' }, 400, cors);
   }
 
+  // ANTI-BOT (Turnstile): se verifica ANTES de tocar la API de Anthropic ni el
+  // servidor — una petición sin token válido no gasta ni un token de modelo.
+  // Si la Secret Key no está configurada, se deja pasar (y se anota en logs)
+  // para que un despiste de variables nunca tumbe el chat.
+  if (env.TURNSTILE_SECRET_KEY) {
+    const humano = await verificarTurnstile(body.turnstileToken, request, env);
+    if (!humano) {
+      return json({ error: 'No he podido verificar que eres humano. Recarga la página e inténtalo de nuevo.' }, 403, cors);
+    }
+  } else {
+    console.error('TURNSTILE_SECRET_KEY no configurada: verificación anti-bot DESACTIVADA.');
+  }
+
   const messages = Array.isArray(body.messages) ? body.messages : [];
   // Contexto opcional de personalización (nombre, dominio del correo, etc.)
   const lead = body.lead || null;
@@ -296,6 +309,31 @@ ${esActivo
     return json({ text: textoVisible }, 200, cors);
   } catch (err) {
     return json({ error: 'No se pudo conectar con Anthropic: ' + err.message }, 502, cors);
+  }
+}
+
+// Verifica un token de Turnstile contra Cloudflare. Devuelve true solo si el
+// desafío es válido. Estricto por diseño: token ausente, usado o caducado = false.
+async function verificarTurnstile(token, request, env) {
+  try {
+    if (!token) return false;
+    const form = new FormData();
+    form.append('secret', env.TURNSTILE_SECRET_KEY);
+    form.append('response', token);
+    const ip = request.headers.get('CF-Connecting-IP');
+    if (ip) form.append('remoteip', ip);
+    const r = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: form,
+    });
+    const d = await r.json();
+    if (d.success !== true) {
+      console.error('Turnstile rechazado:', JSON.stringify(d['error-codes'] || []));
+    }
+    return d.success === true;
+  } catch (err) {
+    console.error('Error verificando Turnstile:', err.message);
+    return false;
   }
 }
 
