@@ -150,19 +150,23 @@ export async function onRequestPost(context) {
     reconocido = await consultarLead(lead.email, env);
   }
 
-  // Si llega info del lead, la inyectamos como nota de sistema para que Emory
-  // pueda saludar con contexto. De momento solo nombre/empresa deducida.
-  let system = SYSTEM_PROMPT;
+  // PROMPT CACHING: el system viaja como DOS bloques. El primero es el prompt
+  // estático (idéntico en todas las peticiones) y va marcado con cache_control:
+  // Anthropic lo cachea y las lecturas siguientes cuestan una fracción del input
+  // normal. El segundo bloque es el contexto VARIABLE del visitante (cambia por
+  // persona) y queda fuera de la caché. No cambiar el orden: la caché es por
+  // prefijo, lo variable siempre al final.
+  let contextoExtra = '';
   if (lead && (lead.nombre || lead.empresaDeducida)) {
-    system += `\n\nCONTEXTO DE ESTE VISITANTE (úsalo con tacto, insinuando, nunca afirmando con seguridad):`;
-    if (lead.nombre) system += `\n- Nombre: ${lead.nombre}`;
-    if (lead.empresaDeducida) system += `\n- Por el dominio de su correo parece que trabaja en: ${lead.empresaDeducida}. NO lo afirmes como hecho; pregúntalo con suavidad ("¿voy bien?").`;
+    contextoExtra += `\n\nCONTEXTO DE ESTE VISITANTE (úsalo con tacto, insinuando, nunca afirmando con seguridad):`;
+    if (lead.nombre) contextoExtra += `\n- Nombre: ${lead.nombre}`;
+    if (lead.empresaDeducida) contextoExtra += `\n- Por el dominio de su correo parece que trabaja en: ${lead.empresaDeducida}. NO lo afirmes como hecho; pregúntalo con suavidad ("¿voy bien?").`;
   }
 
   // Visitante RECONOCIDO: ya existe relación con su empresa. Emory cambia de modo.
   if (reconocido) {
     const esActivo = (reconocido.estado || '').toLowerCase() === 'activo';
-    system += `\n\nVISITANTE RECONOCIDO (dato confirmado por el servidor — esto SÍ puedes afirmarlo):
+    contextoExtra += `\n\nVISITANTE RECONOCIDO (dato confirmado por el servidor — esto SÍ puedes afirmarlo):
 - Su empresa ya tiene relación con la legión: ${reconocido.empresa || 'empresa registrada'}.
 - Contacto previo registrado: ${reconocido.contacto_previo || '(sin nombre)'}
 - Estado de la relación: ${reconocido.estado || 'prospecto'}${esActivo ? ' (YA ES CLIENTE: su Emory está operativo)' : ' (ya recibió una propuesta por correo)'}
@@ -176,6 +180,13 @@ ${esActivo
   : `- Encamina la conversación a que responda al correo de su propuesta: ahí vive la relación y ahí tienes memoria completa.
 - Si dice que no encuentra la propuesta o pide que se la reenvíes, confírmaselo con naturalidad ("te la acabo de reenviar, revisa tu bandeja — y spam, que a veces se esconde") y AÑADE al final de ESE MISMO mensaje, en una línea sola, el marcador exacto: ===REENVIAR PROPUESTA=== — el sistema lo detecta, ejecuta el reenvío de verdad y el visitante no verá el marcador. NO lo emitas si no ha pedido el reenvío ni lo prometas sin emitirlo.`}
 - En este modo NO generes el brief de cierre, SALVO que la conversación aporte información nueva y sustancial sobre su negocio (nuevo dolor, nueva fuente de datos, nuevo decisor); en ese caso ciérrala con brief normal, que el sistema la anexará a su expediente.`;
+  }
+
+  const systemBlocks = [
+    { type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } },
+  ];
+  if (contextoExtra) {
+    systemBlocks.push({ type: 'text', text: contextoExtra });
   }
 
   // Herramienta que Emory puede invocar para leer la web del cliente
@@ -209,7 +220,7 @@ ${esActivo
         body: JSON.stringify({
           model: 'claude-opus-4-8',
           max_tokens: 4000,
-          system,
+          system: systemBlocks,
           tools,
           messages: convo,
         }),
@@ -217,6 +228,12 @@ ${esActivo
       const data = await resp.json();
       if (data.type === 'error') {
         return json({ error: data.error?.message || 'Error de la API de Anthropic.' }, 502, cors);
+      }
+      // Visibilidad del caching en los logs de la Function:
+      // primera petición -> cache_creation_input_tokens alto (escritura);
+      // siguientes -> cache_read_input_tokens alto e input_tokens pequeño (ahorro).
+      if (data.usage) {
+        console.log('usage:', JSON.stringify(data.usage));
       }
       // ¿Emory quiere usar una herramienta?
       const toolUses = (data.content || []).filter((b) => b.type === 'tool_use');
