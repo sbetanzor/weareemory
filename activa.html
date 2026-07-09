@@ -106,8 +106,9 @@
 
   function vPagar(d) {
     html(
-      '<h1>' + esc(d.empresa || 'Tu empresa') + ', tu Emory está listo para nacer.</h1>' +
-      '<p>Un paso y es tuyo: <b>199 €/mes + IVA</b>, hasta 3 conectores incluidos, sin permanencia (mes adelantado, cancelas cuando quieras). Todo Emory es Emory completo.</p>' +
+      '<h1>' + esc(d.empresa || 'Tu empresa') + '</h1>' +
+      '<p style="font-size:17px;color:var(--bone);margin-top:6px">Ya estoy cerca de ser liberado y pasar a ser el empleado estrella de tu equipo — despierto 24/7, sin descanso.</p>' +
+      '<p>Un paso y soy tuyo: <b>199 €/mes + IVA</b>, hasta 3 conectores incluidos, sin permanencia (mes adelantado, cancelas cuando quieras). Todo Emory es Emory completo.</p>' +
       '<div class="card">' +
       '<button class="cta" id="btnPagar">› Activar mi Emory</button>' +
       '<p class="muted" style="margin:14px 0 0">Pago seguro con Stripe (tarjeta o domiciliación SEPA). Al pagar aceptas los términos del servicio.</p>' +
@@ -130,12 +131,12 @@
   }
 
   function vClonando() {
-    html('<h1>Pago recibido. Me estoy clonando.</h1><p class="spinner">Dame unos segundos: estoy montando tu infraestructura<i>_</i></p><p class="muted">Esta página se actualizará sola.</p>');
+    html('<h1>Pago recibido. La legión me está liberando.</h1><p class="spinner">Unos segundos: estoy ocupando mi puesto en tu equipo<i>_</i></p><p class="muted">Esta página se actualizará sola.</p>');
     if (intentosPoll < 12) {
       intentosPoll++;
       setTimeout(cargar, 5000);
     } else {
-      html('<h1>Pago recibido.</h1><p>Mi clonación está tardando más de lo normal. No te preocupes: el pago está registrado y el equipo avisado. Vuelve a abrir este enlace en un rato, o escríbeme a <b>emory@weareemory.com</b>.</p>');
+      html('<h1>Pago recibido.</h1><p>Mi liberación está tardando más de lo normal. No te preocupes: el pago está registrado y el equipo avisado. Vuelve a abrir este enlace en un rato, o escríbeme a <b>emory@weareemory.com</b>.</p>');
     }
   }
 
@@ -238,3 +239,4 @@
 </script>
 </body>
 </html>
+
