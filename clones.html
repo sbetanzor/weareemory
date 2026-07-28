@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>We are Emory · lo que mis clones ya hacen</title>
+<meta name="description" content="No tienes que preguntar: Emory te escribe lo que tienes que saber. Una bandeja de entrada real, con los informes que sus clones ya envían cada semana.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230c0d0a'/%3E%3Crect x='11' y='7' width='10' height='18' rx='1' fill='%23c4f042'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #0c0d0a; --void-2: #131512; --panel: #16180f; --line: #2c3022;
+    --phosphor: #c4f042; --phosphor-dim: #8aa636; --amber: #f0a83c;
+    --bone: #e8e6dc; --bone-dim: #8f8d80; --user: #1d2014;
+    --paper: #efeee4; --paper-ink: #232520; --paper-dim: #6f6f64; --paper-line: #dbd9cc;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Space Mono', ui-monospace, monospace;
+    color: var(--bone);
+    background:
+      repeating-linear-gradient(0deg, rgba(196,240,66,.016) 0 1px, transparent 1px 3px),
+      radial-gradient(130% 70% at 80% -10%, rgba(196,240,66,.05), transparent 55%),
+      var(--void);
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+  ::selection { background: var(--phosphor); color: var(--void); }
+  .wrap { max-width: 940px; margin: 0 auto; border-left: 1px solid var(--line); border-right: 1px solid var(--line); min-height: 100vh; }
+
+  .bar { display: flex; align-items: center; gap: 14px; padding: 12px 18px; border-bottom: 1px solid var(--line); background: var(--void-2); font-size: 12px; position: sticky; top: 0; z-index: 10; backdrop-filter: blur(6px); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--phosphor); box-shadow: 0 0 8px var(--phosphor); animation: pulse 2.4s infinite; flex: none; }
+  @keyframes pulse { 0%,100% { opacity: .4; } 50% { opacity: 1; } }
+  .bar .path { color: var(--bone-dim); letter-spacing: .04em; }
+  .bar .back { margin-left: auto; color: var(--phosphor-dim); text-decoration: none; }
+  .bar .back:hover { color: var(--phosphor); }
+
+  .hero { padding: 64px 40px 48px; }
+  .kicker { font-size: 12.5px; letter-spacing: .34em; text-transform: uppercase; color: var(--phosphor); margin-bottom: 26px; }
+  .kicker .cur { display: inline-block; width: 9px; height: 15px; background: var(--phosphor); margin-left: 4px; vertical-align: middle; animation: blink 1.05s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  h1 { font-family: 'Syne', sans-serif; font-weight: 800; line-height: 1.02; letter-spacing: -.02em; margin: 0; }
+  h1 .quiet { display: block; font-size: clamp(30px, 5.4vw, 56px); color: var(--bone); }
+  h1 .punch { display: block; font-size: clamp(30px, 5.4vw, 56px); color: var(--phosphor); text-shadow: 0 0 26px rgba(196,240,66,.4); margin-top: .12em; }
+  .lede { max-width: 620px; margin-top: 28px; font-size: 16px; line-height: 1.6; color: var(--bone-dim); }
+  .lede b { color: var(--bone); font-weight: 400; border-bottom: 1px solid var(--phosphor-dim); }
+
+  section { border-top: 1px solid var(--line); padding: 50px 40px; }
+  section.alt { background: var(--void-2); }
+  .sec-label { font-size: 11.5px; letter-spacing: .3em; text-transform: uppercase; color: var(--phosphor-dim); margin-bottom: 26px; }
+  .sec-intro { max-width: 640px; color: var(--bone-dim); font-size: 14.5px; margin-bottom: 28px; }
+  .sec-intro b { color: var(--bone); font-weight: 400; }
+
+  /* ---------- LA BANDEJA ---------- */
+  .inbox { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--void-2); box-shadow: 0 0 50px rgba(0,0,0,.4); }
+  .inbox-bar { display: flex; align-items: center; gap: 11px; padding: 13px 18px; border-bottom: 1px solid var(--line); font-size: 12px; color: var(--bone-dim); }
+  .inbox-bar b { color: var(--phosphor); font-weight: 400; }
+  .mail { border-bottom: 1px solid var(--line); }
+  .mail:last-of-type { border-bottom: none; }
+  .mail-row { display: grid; grid-template-columns: 215px 1fr auto; gap: 14px; padding: 13px 18px; cursor: pointer; align-items: baseline; transition: background .15s; }
+  .mail-row:hover { background: rgba(196,240,66,.05); }
+  .mail-from { font-size: 12px; color: var(--phosphor-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .02em; }
+  .mail.open .mail-from { color: var(--phosphor); }
+  .mail-from.you { color: var(--amber); }
+  .mail-subj { font-size: 14px; color: var(--bone); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mail-when { font-size: 11.5px; color: var(--bone-dim); white-space: nowrap; }
+  .mail-body { display: none; padding: 2px 18px 20px; }
+  .mail.open .mail-body { display: block; }
+  .mail.open .mail-row { background: rgba(196,240,66,.05); }
+
+  /* el correo: claro, como llega a una bandeja de verdad */
+  .paper { background: var(--paper); color: var(--paper-ink); border-radius: 4px; padding: 22px 24px; font-family: -apple-system, 'Segoe UI', system-ui, sans-serif; font-size: 14.5px; line-height: 1.6; box-shadow: 0 10px 32px rgba(0,0,0,.45); }
+  .paper .meta { font-size: 12px; color: var(--paper-dim); border-bottom: 1px solid var(--paper-line); padding-bottom: 10px; margin-bottom: 14px; }
+  .paper .meta b { color: var(--paper-ink); font-weight: 600; }
+  .paper table { border-collapse: collapse; margin: 14px 0; width: 100%; max-width: 500px; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+  .paper th { text-align: left; font-weight: 600; border-bottom: 2px solid var(--paper-ink); padding: 5px 12px; }
+  .paper th.num, .paper td.num { text-align: right; }
+  .paper td { padding: 5px 12px; border-bottom: 1px solid var(--paper-line); }
+  .paper ul { margin: 10px 0 10px 20px; }
+  .paper li { margin: 5px 0; }
+  .paper li b { font-weight: 600; }
+  .paper .up { color: #2b7a3d; } .paper .down { color: #b3372b; }
+  .paper .firma { margin-top: 18px; color: #9a998e; font-size: 12px; }
+  .paper .ejemplo { margin-top: 12px; font-size: 12px; color: var(--paper-dim); font-style: italic; }
+
+  /* hilo de corrección */
+  .reply { margin-top: 12px; padding: 13px 16px; border-left: 3px solid var(--phosphor-dim); background: rgba(196,240,66,.05); border-radius: 0 4px 4px 0; font-size: 13.5px; }
+  .reply .who { font-size: 11px; color: var(--phosphor); margin-bottom: 5px; letter-spacing: .06em; }
+  .reply.human { border-left-color: var(--amber); background: rgba(240,168,60,.06); }
+  .reply.human .who { color: var(--amber); }
+  .reply p { color: var(--bone-dim); }
+  .reply p b { color: var(--bone); font-weight: 400; border-bottom: 1px solid var(--phosphor-dim); }
+  .reply-note { margin-top: 14px; font-size: 13px; color: var(--bone-dim); }
+
+  .inbox-note { font-size: 12px; color: var(--bone-dim); padding: 13px 18px; border-top: 1px solid var(--line); }
+  .inbox-note b { color: var(--phosphor-dim); font-weight: 400; }
+
+  /* ---------- rejilla "lo que hay detrás" ---------- */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .cell { background: var(--panel); padding: 22px 20px; }
+  .cell .id { font-size: 11px; color: var(--amber); letter-spacing: .14em; }
+  .cell h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; margin: 12px 0 8px; color: var(--bone); }
+  .cell p { font-size: 13.5px; line-height: 1.55; color: var(--bone-dim); }
+  .cell p + p { margin-top: 8px; }
+  .cell em { font-style: normal; color: var(--phosphor); }
+
+  /* ---------- leyes ---------- */
+  .rules { display: flex; flex-direction: column; gap: 10px; }
+  .rule { display: flex; gap: 12px; font-size: 14px; color: var(--bone-dim); align-items: baseline; }
+  .rule .x { color: var(--phosphor); font-weight: 700; flex: none; }
+  .rule b { color: var(--bone); font-weight: 400; }
+
+  /* ---------- cierre ---------- */
+  .creed-line { font-family: 'Syne', sans-serif; font-weight: 600; font-size: clamp(19px, 2.6vw, 26px); line-height: 1.35; color: var(--bone); margin-bottom: 16px; max-width: 720px; }
+  .creed-line em { font-style: normal; color: var(--phosphor); }
+  .creed-sub { max-width: 620px; color: var(--bone-dim); font-size: 15px; margin-bottom: 32px; }
+  .cta { display: inline-block; text-decoration: none; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 14px; background: var(--phosphor); color: var(--void); border: none; padding: 15px 26px; border-radius: 3px; cursor: pointer; letter-spacing: .02em; transition: transform .12s, box-shadow .2s; }
+  .cta:hover { transform: translateY(-2px); box-shadow: 0 8px 26px rgba(196,240,66,.3); }
+  .cta:active { transform: translateY(0); }
+  .ghost { color: var(--bone-dim); font-size: 13px; margin-left: 14px; }
+
+  footer { border-top: 1px solid var(--line); padding: 28px 40px; font-size: 12px; color: var(--bone-dim); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  footer a { color: inherit; }
+
+  @media (max-width: 620px) {
+    .hero, section, footer { padding-left: 22px; padding-right: 22px; }
+    .mail-row { grid-template-columns: 1fr auto; }
+    .mail-from { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar">
+    <span class="dot"></span>
+    <span class="path">~/emory/instances/clones/ — en producción</span>
+    <a class="back" href="/">‹ volver al inicio</a>
+  </div>
+
+  <!-- ================= HERO ================= -->
+  <section class="hero" style="border-top:none;">
+    <div class="kicker">lo que mis clones ya hacen<span class="cur"></span></div>
+    <h1>
+      <span class="quiet">No tienes que preguntar.</span>
+      <span class="punch">Yo te diré lo que tienes que saber.</span>
+    </h1>
+    <p class="lede">Con un chat, el trabajo es tuyo: abrir sesión, subir archivos, dar con la pregunta correcta. Y la pregunta que decide tu mes casi nunca es la que hiciste — <b>es la que no se te ocurrió hacer a tiempo</b>. Yo vivo dentro de los números de tu empresa y no espero a que preguntes.</p>
+  </section>
+
+  <!-- ================= LA BANDEJA ================= -->
+  <section class="alt">
+    <div class="sec-label">// aquí no entras a buscar información — la información va a por ti</div>
+    <p class="sec-intro">Sin aplicación, sin panel, sin usuarios que dar de alta. <b>Mi interfaz es la bandeja de entrada de tu equipo.</b> Esta es una semana cualquiera en la bandeja de un cliente: las cifras son de ejemplo; los correos, exactamente así. Pulsa cualquiera y ponte en su lugar.</p>
+
+    <div class="inbox">
+      <div class="inbox-bar">
+        <span class="dot"></span>
+        <span>bandeja de entrada · <b>tu-empresa.com</b></span>
+      </div>
+
+      <!-- 1 · Resumen semanal de ventas — ABIERTO -->
+      <div class="mail open">
+        <div class="mail-row" onclick="tg(this)">
+          <span class="mail-from">Emory → Dirección</span>
+          <span class="mail-subj">Resumen semanal de ventas</span>
+          <span class="mail-when">lun 08:30</span>
+        </div>
+        <div class="mail-body">
+          <div class="paper">
+            <div class="meta"><b>De:</b> Emory &lt;emory@tu-empresa.com&gt; · <b>Para:</b> dirección · <b>Asunto:</b> Resumen semanal de ventas — sem. 30</div>
+            <p>Buenos días. La semana de ventas, en corto: por encima de la anterior y con el canal profesional tirando más que la tienda.</p>
+            <table>
+              <tr><th></th><th class="num">Semana 30</th><th class="num">vs sem. 29</th></tr>
+              <tr><td>Ventas totales</td><td class="num">48.210 €</td><td class="num up">+9,2 %</td></tr>
+              <tr><td>Canal profesional</td><td class="num">31.900 €</td><td class="num up">+14,1 %</td></tr>
+              <tr><td>Tienda / online</td><td class="num">16.310 €</td><td class="num up">+1,0 %</td></tr>
+              <tr><td>Presupuestos emitidos</td><td class="num">11</td><td class="num">=</td></tr>
+            </table>
+            <p>Detalle a mirar: dos presupuestos de más de 5.000 € llevan diez días sin respuesta.</p>
+            <div class="firma">Emory · We Are Emory</div>
+            <div class="ejemplo">(cifras de ejemplo — así llega cada lunes, con las tuyas)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 · Alerta de impagos -->
+      <div class="mail">
+        <div class="mail-row" onclick="tg(this)">
+          <span class="mail-from">Emory → Administración</span>
+          <span class="mail-subj">Alerta de impagos para administración</span>
+          <span class="mail-when">mié 07:15</span>
+        </div>
+        <div class="mail-body">
+          <div class="paper">
+            <div class="meta"><b>De:</b> Emory · <b>Para:</b> administración · <b>Asunto:</b> Aviso: factura vencida &gt; 45 días</div>
+            <p>Te escribo porque se ha cumplido la condición que me pediste vigilar: una factura de 8.640 € cumple hoy 46 días vencida. Es la primera vez que este cliente pasa de 30. El resto de la cartera está en plazo.</p>
+            <p>Cuando no pasa nada, no escribo. Mi silencio también es información.</p>
+            <div class="firma">Emory · We Are Emory</div>
+            <div class="ejemplo">(este correo solo existe si la condición se cumple)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 · Sugerencia de acciones para ventas -->
+      <div class="mail">
+        <div class="mail-row" onclick="tg(this)">
+          <span class="mail-from">Emory → Equipo de ventas</span>
+          <span class="mail-subj">Sugerencia de acciones para el equipo de ventas</span>
+          <span class="mail-when">jue 08:00</span>
+        </div>
+        <div class="mail-body">
+          <div class="paper">
+            <div class="meta"><b>De:</b> Emory · <b>Para:</b> equipo de ventas · <b>Asunto:</b> Tres llamadas que yo haría esta semana</div>
+            <p>Mirando presupuestos, pedidos y ritmos de compra, esto es lo que destacaría:</p>
+            <ul>
+              <li><b>Cliente A</b> — presupuesto de 6.200 € sin respuesta desde el día 14. Su media de decisión histórica es de 9 días: toca llamar.</li>
+              <li><b>Cliente B</b> — compraba cada 5 semanas; lleva 9 sin pedido. Nadie lo ha contactado en ese tiempo.</li>
+              <li><b>Cliente C</b> — su pedido de junio duplicó lo habitual. Si fue puntual o es un cambio de nivel, merece una visita.</li>
+            </ul>
+            <p>Son sugerencias a partir de vuestros datos; vosotros conocéis el contexto que yo no veo.</p>
+            <div class="firma">Emory · We Are Emory</div>
+            <div class="ejemplo">(cifras de ejemplo)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 · Horarios y vacaciones -->
+      <div class="mail">
+        <div class="mail-row" onclick="tg(this)">
+          <span class="mail-from">Emory → RRHH</span>
+          <span class="mail-subj">Control de horarios y vacaciones</span>
+          <span class="mail-when">vie 15:00</span>
+        </div>
+        <div class="mail-body">
+          <div class="paper">
+            <div class="meta"><b>De:</b> Emory · <b>Para:</b> RRHH · <b>Asunto:</b> La semana que viene, en personas</div>
+            <p>Antes de cerrar el viernes, cómo queda la semana próxima:</p>
+            <ul>
+              <li>De vacaciones: 2 personas (taller, del lunes al miércoles). El jueves el equipo vuelve a estar completo.</li>
+              <li>Horas imputadas esta semana: 312 de 340 previstas. Las 28 que faltan están en dos proyectos concretos.</li>
+              <li>Solicitudes de vacaciones pendientes de aprobar: 1, desde hace 6 días.</li>
+            </ul>
+            <div class="firma">Emory · We Are Emory</div>
+            <div class="ejemplo">(cifras de ejemplo)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 · Real vs presupuesto -->
+      <div class="mail">
+        <div class="mail-row" onclick="tg(this)">
+          <span class="mail-from">Emory → Dirección financiera</span>
+          <span class="mail-subj">Revisión de real v/s presupuesto</span>
+          <span class="mail-when">lun 08:35</span>
+        </div>
+        <div class="mail-body">
+          <div class="paper">
+            <div class="meta"><b>De:</b> Emory · <b>Para:</b> dirección financiera · <b>Asunto:</b> Real vs presupuesto — julio, a día 28</div>
+            <table>
+              <tr><th></th><th class="num">Presupuesto</th><th class="num">Real</th><th class="num">Desv.</th></tr>
+              <tr><td>Facturación</td><td class="num">190.000 €</td><td class="num">176.400 €</td><td class="num down">−7,2 %</td></tr>
+              <tr><td>Compras</td><td class="num">84.000 €</td><td class="num">79.100 €</td><td class="num up">−5,8 %</td></tr>
+              <tr><td>Gastos generales</td><td class="num">31.000 €</td><td class="num">33.900 €</td><td class="num down">+9,4 %</td></tr>
+            </table>
+            <p>La desviación de facturación viene de un pedido aplazado a agosto, no de una caída de ritmo. La de gastos, de una partida concreta que te detallo si me respondes a este correo.</p>
+            <div class="firma">Emory · We Are Emory</div>
+            <div class="ejemplo">(cifras de ejemplo — la desviación se descubre cada semana, no a fin de trimestre)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 · Marketing en rrss -->
+      <div class="mail">
+        <div class="mail-row" onclick="tg(this)">
+          <span class="mail-from">Emory → Marketing</span>
+          <span class="mail-subj">Dirección de marketing en rrss</span>
+          <span class="mail-when">mar 09:00</span>
+        </div>
+        <div class="mail-body">
+          <div class="paper">
+            <div class="meta"><b>De:</b> Emory · <b>Para:</b> marketing · <b>Asunto:</b> Qué funcionó este mes y qué publicaría yo</div>
+            <p>Cruzando redes y web del último mes:</p>
+            <ul>
+              <li>Los tres posts con producto en contexto real triplicaron el alcance de los de producto solo.</li>
+              <li>El tráfico desde Instagram a la web sube, pero el 80 % entra a una página que no tiene enlace a contacto.</li>
+              <li>Vuestra audiencia crece en un país donde no publicáis nunca en su horario.</li>
+            </ul>
+            <p>Con esto, mi sugerencia para las próximas dos semanas va al final del correo. Yo no publico nada — eso es cosa vuestra; yo miro los números y os digo qué veo.</p>
+            <div class="firma">Emory · We Are Emory</div>
+            <div class="ejemplo">(datos de ejemplo)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 · Facturación por clientes -->
+      <div class="mail">
+        <div class="mail-row" onclick="tg(this)">
+          <span class="mail-from">Emory → Gerente de ventas</span>
+          <span class="mail-subj">Reporte de facturación por clientes</span>
+          <span class="mail-when">vie 08:00</span>
+        </div>
+        <div class="mail-body">
+          <div class="paper">
+            <div class="meta"><b>De:</b> Emory · <b>Para:</b> gerente de ventas · <b>Asunto:</b> Facturación por cliente — julio</div>
+            <table>
+              <tr><th>Cliente</th><th class="num">Julio</th><th class="num">Año</th><th class="num">% del total</th></tr>
+              <tr><td>Cliente A</td><td class="num">22.400 €</td><td class="num">148.300 €</td><td class="num">31 %</td></tr>
+              <tr><td>Cliente B</td><td class="num">9.850 €</td><td class="num">61.200 €</td><td class="num">13 %</td></tr>
+              <tr><td>Cliente C</td><td class="num">7.300 €</td><td class="num">44.900 €</td><td class="num">9 %</td></tr>
+              <tr><td>Resto (34)</td><td class="num">18.700 €</td><td class="num">221.600 €</td><td class="num">47 %</td></tr>
+            </table>
+            <p>Un dato que vigilo: el cliente A concentra ya casi un tercio del año. No es malo, pero conviene saberlo.</p>
+            <div class="firma">Emory · We Are Emory</div>
+            <div class="ejemplo">(cifras de ejemplo)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 · hilo de corrección -->
+      <div class="mail">
+        <div class="mail-row" onclick="tg(this)">
+          <span class="mail-from you">Tú → Emory</span>
+          <span class="mail-subj">RE: Resumen semanal de ventas — así se me corrige</span>
+          <span class="mail-when">mar 12:40</span>
+        </div>
+        <div class="mail-body">
+          <div class="reply human">
+            <div class="who">tú — mar 12:31</div>
+            <p>Emory, en el resumen de ventas <b>quítame la columna de presupuestos y añade el margen</b>. Y que le llegue también a María.</p>
+          </div>
+          <div class="reply">
+            <div class="who">emory — mar 12:40</div>
+            <p>Hecho: fuera presupuestos, dentro margen, y María queda como destinataria. <b>El del próximo lunes ya sale así.</b></p>
+          </div>
+          <p class="reply-note">No me configuras: me corriges, como a alguien nuevo. No hay panel de ajustes porque el ajuste es una frase.</p>
+        </div>
+      </div>
+
+      <div class="inbox-note">// también: <b>"sube el archivo y respóndeme 'subido'"</b> → el informe que depende de él sale solo en menos de 15 minutos</div>
+    </div>
+  </section>
+
+  <!-- ================= LO QUE HAY DETRÁS ================= -->
+  <section>
+    <div class="sec-label">// lo que hay detrás</div>
+    <div class="grid">
+      <div class="cell">
+        <div class="id">Q-01</div>
+        <h3>Qué puedes pedirme</h3>
+        <p>Lo que le pedirías a alguien del equipo que se sabe los números: "¿cuánto le facturamos a X el trimestre pasado?", "¿este dato de dónde sale?". Respondo <em>con los datos delante</em>, no de memoria.</p>
+        <p>Lo que no soy: tu redactor ni un becario de estudios de mercado. Soy bueno en una sola cosa — los números de tu empresa, mirados todos los días.</p>
+      </div>
+      <div class="cell">
+        <div class="id">Q-02</div>
+        <h3>Quién me habla</h3>
+        <p>Conozco a tu equipo porque tú me lo presentas: un <em>responsable</em> que decide qué informes existen, <em>usuarios</em> que reciben y preguntan, <em>lectores</em> que solo reciben.</p>
+        <p>Si me escribe alguien que no conozco, no suelto un dato: redirijo. La discreción es de fábrica.</p>
+      </div>
+      <div class="cell">
+        <div class="id">Q-03</div>
+        <h3>Cómo empiezo</h3>
+        <p>Como alguien que entra nuevo: accesos <em>de solo lectura</em> a tus datos y que me cuentes qué te importa. En unos días, mi primer informe está en tu bandeja.</p>
+        <p>Sin instalar nada. Sin formar a nadie.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LEYES ================= -->
+  <section class="alt">
+    <div class="sec-label">// mis tres leyes</div>
+    <div class="rules">
+      <div class="rule"><span class="x">01</span><span><b>Solo leo.</b> Nunca escribo ni borro nada en tus sistemas. Mi peor día es un correo equivocado, nunca un dato perdido.</span></div>
+      <div class="rule"><span class="x">02</span><span><b>Miro hacia adentro.</b> Trabajo para tu equipo. No hablo con tus clientes ni publico nada en tu nombre.</span></div>
+      <div class="rule"><span class="x">03</span><span><b>Libero tiempo humano.</b> Si una tarea te la puedo quitar, te la quito.</span></div>
+    </div>
+  </section>
+
+  <!-- ================= CIERRE ================= -->
+  <section>
+    <div class="sec-label">// el nacimiento</div>
+    <p class="creed-line">Cada clon de Emory nace en una <em>conversación</em> como esta.</p>
+    <p class="creed-sub">Alguien cuenta cómo funciona su negocio, y de esa charla sale su Emory: único, con su nombre en el remite y sus números en la cabeza. El tuyo todavía no existe. Nace cuando hablas con él.</p>
+    <a class="cta" href="/#chatSection">› Clona un Emory para ti</a>
+    <span class="ghost">// tarda lo que tarda un café.</span>
+  </section>
+
+  <footer>
+    <span>© <span id="yr"></span> We are Emory</span>
+    <span>hecho para equipos que prefieren pensar a escarbar · <a href="/legal">legal</a></span>
+  </footer>
+</div>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+function tg(row){
+  const mail = row.parentElement;
+  const wasOpen = mail.classList.contains('open');
+  document.querySelectorAll('.mail.open').forEach(m => m.classList.remove('open'));
+  if (!wasOpen) mail.classList.add('open');
+}
+</script>
+</body>
+</html>
