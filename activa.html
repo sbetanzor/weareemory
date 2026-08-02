@@ -71,7 +71,7 @@
     <div class="kicker">we are emory</div>
     <div id="contenido"><p class="spinner">abriendo tu puerta<i>_</i></p></div>
   </main>
-  <footer>Esta puerta es personal. Si algo no cuadra, escríbeme: emory@weareemory.com</footer>
+  <footer>Esta puerta es personal. Si algo no cuadra, escríbeme: emory@weareemory.com · <a href="/legal" style="color:var(--phosphor-dim)">legal</a></footer>
 </div>
 
 <script>
@@ -111,7 +111,7 @@
       '<p>Un paso y soy tuyo: <b>199 €/mes + IVA</b>, hasta 3 conectores incluidos, sin permanencia (mes adelantado, cancelas cuando quieras). Todo Emory es Emory completo.</p>' +
       '<div class="card">' +
       '<button class="cta" id="btnPagar">› Activar mi Emory</button>' +
-      '<p class="muted" style="margin:14px 0 0">Pago seguro con Stripe (tarjeta o domiciliación SEPA). Al pagar aceptas los términos del servicio.</p>' +
+      '<p class="muted" style="margin:14px 0 0">Pago seguro con Stripe (tarjeta o domiciliación SEPA). Al pagar aceptas los <a href="/legal#terminos" target="_blank" style="color:var(--phosphor-dim)">términos del servicio</a>.</p>' +
       '<div class="err" id="err"></div>' +
       '</div>'
     );
@@ -157,6 +157,7 @@
         ? '<p><b>Ya recibí accesos tuyos</b> — están a buen recaudo. Si quieres añadir más sistemas o corregir algo, este mismo formulario sirve.</p>'
         : '<p>Necesito acceso de <b>solo lectura</b> a tus sistemas. Nunca escribo, modifico ni borro nada: es mi primera ley. Pega aquí las claves; viajan cifradas directas a mi servidor, sin pasar por correo.</p>') +
       '<div class="card">' +
+      '<p class="muted" style="margin-bottom:16px">Si tu fuente es un Excel u hoja de cálculo: debe vivir en <b>Google Drive</b>. Pega aquí la URL de la carpeta y, además, compártela en solo lectura con mi cuenta: <b>emory-clients@weareemory-ops.iam.gserviceaccount.com</b></p>' +
       '<div id="filas">' + filaHTML('', '') + '</div>' +
       '<button type="button" class="ghost-btn" id="masFilas">+ añadir otro sistema</button>' +
       '<label class="lbl" for="notas">Notas para el equipo (opcional)</label>' +
@@ -239,4 +240,3 @@
 </script>
 </body>
 </html>
-
