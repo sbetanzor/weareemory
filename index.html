@@ -1,11 +1,10 @@
 <!DOCTYPE html>
+<!-- build: home-v5-produccion · 03-08-2026 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>We are Emory · una legión de IA que piensa tus datos</title>
-<meta name="description" content="No somos una consultora. Una legión de IA que piensa tus datos sin descanso, para liberar tu lado humano.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230c0d0a'/%3E%3Crect x='11' y='7' width='10' height='18' rx='1' fill='%23c4f042'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
@@ -36,96 +35,195 @@
   .bar .path { color: var(--bone-dim); letter-spacing: .04em; }
   .bar .stat { margin-left: auto; color: var(--phosphor-dim); }
 
+  /* ═══ SECCIÓN 1 · HERO ═══ */
   .hero { padding: 64px 40px 48px; }
   .kicker { font-size: 12.5px; letter-spacing: .34em; text-transform: uppercase; color: var(--phosphor); margin-bottom: 26px; }
   .kicker .cur { display: inline-block; width: 9px; height: 15px; background: var(--phosphor); margin-left: 4px; vertical-align: middle; animation: blink 1.05s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
   h1 { font-family: 'Syne', sans-serif; font-weight: 800; line-height: .94; letter-spacing: -.025em; color: var(--bone); margin: 0; }
-  /* La frase descriptiva: nace grande, se asienta pequeña */
   .h-phrase { display: block; font-size: clamp(44px, 8.5vw, 92px); line-height: .98; color: var(--bone); transition: font-size .55s cubic-bezier(.4,0,.2,1), color .55s, opacity .4s; }
   .h-phrase.settled { font-size: clamp(18px, 2.4vw, 26px); color: var(--bone-dim); line-height: 1.3; }
-  /* El remate: siempre grande */
   .h-punch { display: block; font-size: clamp(44px, 8.5vw, 92px); line-height: .94; color: var(--phosphor); text-shadow: 0 0 26px rgba(196,240,66,.4); margin-top: .12em; min-height: 1px; }
   #heroTitle { min-height: 4.4em; }
   .type-cur { display: inline-block; width: .055em; height: .8em; background: currentColor; margin-left: .04em; vertical-align: baseline; animation: typeBlink 1.05s steps(1) infinite; }
   .h-punch .type-cur { background: var(--phosphor); box-shadow: 0 0 12px rgba(196,240,66,.6); }
   @keyframes typeBlink { 50% { opacity: 0; } }
-  .lede { max-width: 600px; margin-top: 30px; font-size: 17px; line-height: 1.6; color: var(--bone-dim); }
+  .lede { max-width: 620px; margin-top: 30px; font-size: 17px; line-height: 1.6; color: var(--bone-dim); }
   .lede b { color: var(--bone); font-weight: 400; border-bottom: 1px solid var(--phosphor-dim); }
-  .cta-row { margin-top: 40px; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .cta-row { margin-top: 40px; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; transition: opacity .5s ease, transform .5s ease; }
+  .cta-row.waiting { opacity: 0; transform: translateY(8px); }
   .cta { font-family: 'Space Mono', monospace; font-weight: 700; font-size: 14px; background: var(--phosphor); color: var(--void); border: none; padding: 15px 26px; border-radius: 3px; cursor: pointer; letter-spacing: .02em; transition: transform .12s, box-shadow .2s; }
   .cta:hover { transform: translateY(-2px); box-shadow: 0 8px 26px rgba(196,240,66,.3); }
-  .cta:active { transform: translateY(0); }
   .ghost { color: var(--bone-dim); font-size: 13px; }
 
-  .manifesto { border-top: 1px solid var(--line); padding: 50px 40px; background: var(--void-2); }
-  .sec-label { font-size: 11.5px; letter-spacing: .3em; text-transform: uppercase; color: var(--phosphor-dim); margin-bottom: 26px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
-  .cell { background: var(--panel); padding: 22px 20px; }
-  .cell .id { font-size: 11px; color: var(--amber); letter-spacing: .14em; }
-  .cell h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; margin: 12px 0 8px; color: var(--bone); }
-  .cell p { font-size: 13.5px; line-height: 1.55; color: var(--bone-dim); }
-  .rules { margin-top: 34px; display: flex; flex-direction: column; gap: 10px; }
-  .rule { display: flex; gap: 12px; font-size: 14px; color: var(--bone-dim); align-items: baseline; }
+  /* ═══ SECCIÓN 2 · LA BANDEJA ═══ */
+  .sec { padding: 56px 40px 60px; border-top: 1px solid var(--line); }
+  .sec-label { font-size: 11.5px; letter-spacing: .3em; text-transform: uppercase; color: var(--phosphor-dim); margin-bottom: 22px; }
+  h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(28px, 4.4vw, 44px); line-height: 1.08; letter-spacing: -.02em; margin-bottom: 18px; }
+  h2 em { font-style: normal; color: var(--phosphor); }
+  .intro { max-width: 640px; font-size: 15.5px; color: var(--bone-dim); margin-bottom: 34px; }
+  .intro b { color: var(--bone); font-weight: 400; border-bottom: 1px solid var(--phosphor-dim); }
+
+  .inbox { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--void-2); box-shadow: 0 0 50px rgba(0,0,0,.4); }
+  .inbox-head { padding: 13px 18px; border-bottom: 1px solid var(--line); font-size: 12.5px; color: var(--bone-dim); display: flex; align-items: center; gap: 11px; }
+  .inbox-head b { color: var(--phosphor); font-weight: 400; }
+  .mail { border-bottom: 1px solid var(--line); }
+  .mail:last-child { border-bottom: none; }
+  .mail-row { display: flex; align-items: baseline; gap: 12px; padding: 15px 18px; cursor: pointer; font-size: 13.5px; transition: background .15s; }
+  .mail-row:hover { background: rgba(196,240,66,.04); }
+  .mail.open .mail-row { background: rgba(196,240,66,.05); }
+  .mail-row .from { color: var(--phosphor-dim); flex: none; }
+  .mail-row .from b { color: var(--phosphor); font-weight: 400; }
+  .mail-row .subj { color: var(--bone); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mail-row .when { margin-left: auto; color: var(--bone-dim); font-size: 12px; flex: none; }
+  .mail-row .chev { color: var(--bone-dim); flex: none; transition: transform .2s; font-size: 11px; }
+  .mail.open .mail-row .chev { transform: rotate(90deg); }
+  .mail-body { display: none; margin: 2px 16px 20px; padding: 18px 20px 20px; animation: rise .3s ease both;
+    background: linear-gradient(rgba(232,230,220,.06), rgba(232,230,220,.06)), var(--void-2);
+    border: 1px solid var(--line); border-radius: 5px; }
+  .mail.open .mail-body { display: block; }
+  @keyframes rise { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+
+  .meta { display: flex; flex-direction: column; gap: 5px; border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 16px; }
+  .m-line { font-size: 13px; color: var(--bone); }
+  .m-k { display: inline-block; min-width: 70px; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--phosphor-dim); }
+  .mail-body p { font-size: 14px; color: var(--bone); margin-bottom: 14px; max-width: 640px; }
+  .mail-body p.dim { color: var(--bone-dim); }
+
+  table { width: 100%; border-collapse: collapse; margin: 14px 0 18px; font-size: 13px; }
+  th { text-align: left; font-weight: 400; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--phosphor-dim); padding: 8px 10px; border-bottom: 1px solid var(--line); }
+  td { padding: 9px 10px; border-bottom: 1px solid rgba(44,48,34,.6); color: var(--bone); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td .up { color: var(--phosphor); }
+  td .warn { color: var(--amber); }
+  td.mut, .mut { color: var(--bone-dim); }
+  tr.hot td { background: rgba(240,168,60,.06); }
+  tr.hot td:first-child { border-left: 2px solid var(--amber); }
+  .ok-tag { color: var(--phosphor); font-size: 11px; letter-spacing: .08em; }
+  .warn-tag { color: var(--amber); font-size: 11px; letter-spacing: .08em; }
+
+  .alert { border: 1px solid rgba(240,168,60,.4); border-left: 3px solid var(--amber); border-radius: 4px; padding: 12px 14px; margin: 14px 0; font-size: 13.5px; }
+  .alert b { color: var(--amber); font-weight: 700; }
+  .insight { border-left: 3px solid var(--phosphor-dim); padding: 2px 0 2px 14px; margin: 16px 0 6px; font-size: 13.5px; color: var(--bone-dim); font-style: italic; }
+  .insight b { color: var(--bone); font-weight: 400; font-style: normal; }
+  .sig { font-size: 12.5px; color: var(--bone-dim); margin-top: 14px; }
+  .sig b { color: var(--phosphor-dim); font-weight: 400; }
+  .fine { font-size: 11.5px; color: var(--bone-dim); margin-top: 6px; }
+  .turn { max-width: 84%; font-size: 13.5px; margin-bottom: 12px; }
+  .turn.u { margin-left: auto; background: var(--user); border: 1px solid var(--line); padding: 10px 14px; border-radius: 4px; }
+  .turn.b::before { content: 'emory ~ '; color: var(--phosphor-dim); }
+  .after { margin-top: 26px; font-size: 13px; color: var(--bone-dim); }
+  .after b { color: var(--bone); font-weight: 400; }
+
+  /* ═══ SECCIÓN 3 · QUÉ SOMOS ═══ */
+  .sec3 { background: var(--void-2); }
+  .creed-big { font-family: 'Syne', sans-serif; font-weight: 800; letter-spacing: -.02em; line-height: 1.04; font-size: clamp(36px, 6.4vw, 68px); margin-bottom: 30px; }
+  .creed-big .a { color: var(--bone); display: block; }
+  .creed-big .b { color: var(--phosphor); display: block; text-shadow: 0 0 24px rgba(196,240,66,.35); }
+  .what { max-width: 660px; font-size: 16.5px; line-height: 1.65; color: var(--bone-dim); margin-bottom: 44px; }
+  .what b { color: var(--bone); font-weight: 400; border-bottom: 1px solid var(--phosphor-dim); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .cell { background: var(--panel); padding: 24px 22px 26px; }
+  .cell .id { font-size: 11px; color: var(--amber); letter-spacing: .14em; margin-bottom: 12px; }
+  .cell h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18.5px; line-height: 1.25; margin-bottom: 12px; color: var(--bone); }
+  .cell p { font-size: 13.5px; line-height: 1.6; color: var(--bone-dim); }
+  .cell p b { color: var(--bone); font-weight: 400; }
+  .cell .kick { margin-top: 12px; font-size: 13.5px; color: var(--phosphor); }
+
+
+  /* SECCION 4 LEYES */
+  .rules { display: flex; flex-direction: column; gap: 12px; max-width: 720px; }
+  .rule { display: flex; gap: 14px; font-size: 14.5px; color: var(--bone-dim); align-items: baseline; }
   .rule .x { color: var(--phosphor); font-weight: 700; flex: none; }
   .rule b { color: var(--bone); font-weight: 400; }
 
-  .creed { margin-top: 48px; padding-top: 34px; border-top: 1px solid var(--line); }
-  .creed-line { font-family: 'Syne', sans-serif; font-weight: 600; font-size: clamp(19px, 2.6vw, 26px); line-height: 1.35; color: var(--bone); margin-bottom: 16px; max-width: 720px; }
-  .creed-line em { font-style: normal; color: var(--phosphor); }
-  .creed-line.dim { color: var(--phosphor-dim); font-size: clamp(17px, 2vw, 21px); }
+  .vault { max-width: 720px; }
+  .vault p { font-size: 14.5px; color: var(--bone-dim); line-height: 1.65; margin-bottom: 8px; }
+  .vault p b { color: var(--bone); font-weight: 400; border-bottom: 1px solid var(--phosphor-dim); }
 
-  .chatwrap { border-top: 1px solid var(--line); padding: 50px 40px 60px; }
+  /* SECCION 5 PREGUNTAS */
+  .faq { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--void-2); }
+  .q { border-bottom: 1px solid var(--line); }
+  .q:last-child { border-bottom: none; }
+  .q-row { display: flex; align-items: baseline; gap: 12px; padding: 16px 18px; cursor: pointer; transition: background .15s; }
+  .q-row:hover { background: rgba(196,240,66,.04); }
+  .q.open .q-row { background: rgba(196,240,66,.05); }
+  .q-row .chev { color: var(--bone-dim); flex: none; transition: transform .2s; font-size: 11px; }
+  .q.open .q-row .chev { transform: rotate(90deg); }
+  .q-row h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16.5px; color: var(--bone); }
+  .q-body { display: none; padding: 0 18px 20px 41px; animation: rise .3s ease both; }
+  .q.open .q-body { display: block; }
+  .q-body p { font-size: 14px; line-height: 1.65; color: var(--bone-dim); max-width: 640px; margin-bottom: 10px; }
+  .q-body p b { color: var(--bone); font-weight: 400; }
+  .tbc { color: var(--amber); font-size: 12px; }
+
+  /* SECCION 6 PRECIO */
+  .price-big { font-family: 'Syne', sans-serif; font-weight: 800; letter-spacing: -.02em; line-height: 1; font-size: clamp(52px, 9vw, 100px); color: var(--phosphor); text-shadow: 0 0 26px rgba(196,240,66,.35); margin-bottom: 6px; }
+  .price-big small { font-size: .3em; color: var(--phosphor-dim); font-weight: 700; letter-spacing: 0; }
+  .price-sub { font-size: 15.5px; color: var(--bone-dim); max-width: 620px; margin-bottom: 26px; }
+  .price-sub b { color: var(--bone); font-weight: 400; border-bottom: 1px solid var(--phosphor-dim); }
+  .srcs { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; max-width: 660px; }
+  .srcs .lbl { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--phosphor-dim); margin-right: 4px; }
+  .chip { border: 1px solid var(--line); border-radius: 3px; padding: 4px 10px; font-size: 12px; color: var(--bone-dim); background: var(--panel); }
+  .chip.more { color: var(--phosphor-dim); border-color: var(--phosphor-dim); }
+  .anchor-line { border-left: 3px solid var(--phosphor); padding: 6px 0 6px 18px; max-width: 640px; margin-top: 30px;
+    font-family: 'Syne', sans-serif; font-weight: 600; font-size: clamp(17px, 2.3vw, 23px); line-height: 1.35; color: var(--bone); }
+  .anchor-line em { font-style: normal; color: var(--phosphor); }
+
+  /* SECCION 7 NACIMIENTO + CHAT */
+  .birth { max-width: 640px; margin-bottom: 34px; }
+  .birth p { font-family: 'Syne', sans-serif; font-weight: 600; font-size: clamp(19px, 2.6vw, 25px); line-height: 1.35; color: var(--bone); margin-bottom: 14px; }
+  .birth p em { font-style: normal; color: var(--phosphor); }
   .chat { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--void-2); box-shadow: 0 0 50px rgba(0,0,0,.4); }
   .chat-head { padding: 14px 18px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 11px; font-size: 12.5px; }
-  .chat-head .meta { color: var(--bone-dim); }
-  .chat-head .meta b { color: var(--phosphor); font-weight: 400; }
+  .chat-head .cmeta { color: var(--bone-dim); }
+  .chat-head .cmeta b { color: var(--phosphor); font-weight: 400; }
   .chat-head .inst { margin-left: auto; color: var(--amber); font-size: 11px; letter-spacing: .12em; }
-
-  /* gate de nombre+email */
   .gate { padding: 40px 28px; }
   .gate h4 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 22px; color: var(--bone); margin-bottom: 8px; }
   .gate p { color: var(--bone-dim); font-size: 14px; margin-bottom: 24px; max-width: 460px; }
-  .field { margin-bottom: 16px; }
+  .field { margin-bottom: 16px; max-width: 460px; }
   .field label { display: block; font-size: 12px; color: var(--phosphor-dim); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 7px; }
   .field input { width: 100%; background: var(--void); border: 1px solid var(--line); color: var(--bone); font-family: 'Space Mono', monospace; font-size: 15px; padding: 12px 14px; border-radius: 4px; outline: none; }
   .field input:focus { border-color: var(--phosphor-dim); }
   .field input::placeholder { color: #5d6150; }
-  .gate-err { color: var(--amber); font-size: 13px; min-height: 18px; margin-bottom: 10px; }
+  .privacy { font-size: 11px; color: var(--bone-dim); margin-top: 14px; line-height: 1.5; max-width: 460px; }
+  footer { border-top: 1px solid var(--line); padding: 28px 40px; font-size: 12px; color: var(--bone-dim); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
 
+  .note { border-top: 1px solid var(--line); padding: 22px 40px; font-size: 12px; color: var(--bone-dim); }
+  .note b { color: var(--amber); font-weight: 400; }
+  @media (max-width: 620px) {
+    .hero, .sec, .note { padding-left: 20px; padding-right: 20px; }
+    .mail-row .from { display: none; }
+    table { font-size: 12px; }
+    th, td { padding: 7px 6px; }
+  }
+
+  /* ---- chat vivo (motor trasplantado del index anterior) ---- */
+  .gate-err { color: var(--amber); font-size: 13px; min-height: 18px; margin-bottom: 10px; }
   .stream { height: 380px; overflow-y: auto; padding: 22px 20px 6px; display: none; flex-direction: column; gap: 13px; }
   .stream::-webkit-scrollbar { width: 8px; }
   .stream::-webkit-scrollbar-thumb { background: var(--line); border-radius: 8px; }
   .msg { max-width: 84%; font-size: 14.5px; line-height: 1.55; animation: rise .35s ease both; white-space: pre-wrap; }
   @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-  .b { align-self: flex-start; color: var(--bone); }
-  .b::before { content: 'emory ~ '; color: var(--phosphor-dim); }
-  .u { align-self: flex-end; background: var(--user); border: 1px solid var(--line); color: var(--bone); padding: 10px 14px; border-radius: 4px; }
-  .type { align-self: flex-start; color: var(--phosphor-dim); font-size: 14px; }
-  .type::before { content: 'emory ~ '; }
-  .type i { font-style: normal; animation: blink 1s steps(1) infinite; }
-
-  /* contenedor Turnstile: invisible salvo que Cloudflare necesite mostrar un desafío */
+  .msg.b { align-self: flex-start; color: var(--bone); }
+  .msg.b::before { content: 'emory ~ '; color: var(--phosphor-dim); }
+  .msg.u { align-self: flex-end; background: var(--user, #1d2014); border: 1px solid var(--line); color: var(--bone); padding: 10px 14px; border-radius: 4px; }
+  .chat .type { align-self: flex-start; color: var(--phosphor-dim); font-size: 14px; }
+  .chat .type::before { content: 'emory ~ '; }
+  .chat .type i { font-style: normal; animation: blink 1s steps(1) infinite; }
+  .msg .cur { display: inline-block; width: .5em; height: .9em; background: var(--phosphor); margin-left: 2px; vertical-align: baseline; animation: blink 1.05s steps(1) infinite; }
   .ts-slot { padding: 0 14px; }
   .ts-slot:empty { display: none; }
-
   .foot { padding: 14px; border-top: 1px solid var(--line); display: none; gap: 10px; }
-  .in { flex: 1; background: var(--void); border: 1px solid var(--line); color: var(--bone); font-family: 'Space Mono', monospace; font-size: 14px; padding: 11px 14px; border-radius: 4px; outline: none; }
-  .in:focus { border-color: var(--phosphor-dim); }
-  .in::placeholder { color: #5d6150; }
-  .go { background: var(--phosphor); color: var(--void); border: none; font-family: 'Space Mono', monospace; font-weight: 700; padding: 0 20px; border-radius: 4px; cursor: pointer; font-size: 13px; }
-  .go:hover { background: #d4ff52; }
-  .go:disabled { opacity: .4; cursor: not-allowed; }
-
-  .privacy { font-size: 11px; color: var(--bone-dim); margin-top: 14px; line-height: 1.5; }
+  .foot .in { flex: 1; background: var(--void); border: 1px solid var(--line); color: var(--bone); font-family: 'Space Mono', monospace; font-size: 14px; padding: 11px 14px; border-radius: 4px; outline: none; }
+  .foot .in:focus { border-color: var(--phosphor-dim); }
+  .foot .in::placeholder { color: #5d6150; }
+  .foot .go { background: var(--phosphor); color: var(--void); border: none; font-family: 'Space Mono', monospace; font-weight: 700; padding: 0 20px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+  .foot .go:hover { background: #d4ff52; }
+  .foot .go:disabled { opacity: .4; cursor: not-allowed; }
   .privacy a { color: var(--phosphor-dim); }
-
-  footer { border-top: 1px solid var(--line); padding: 28px 40px; font-size: 12px; color: var(--bone-dim); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-
-  @media (max-width: 620px) {
-    .hero, .manifesto, .chatwrap, footer { padding-left: 22px; padding-right: 22px; }
-    .stream { height: 52vh; }
-  }
 </style>
 </head>
 <body>
@@ -133,52 +231,222 @@
   <div class="bar">
     <span class="dot"></span>
     <span class="path">~/emory/instances/ — all systems nominal</span>
-    <span class="stat">[ 2 active · 1 spawning ]</span>
+    <span class="stat">[ 3 active · 1 spawning ]</span>
   </div>
 
+  <!-- ═══════════ SECCIÓN 1 · HERO ═══════════ -->
   <section class="hero">
     <div class="kicker">we are emory<span class="cur" id="kickerCur"></span></div>
-    <h1 id="heroTitle" aria-label="Una legión de IA que piensa tus datos sin descanso. Liberamos tu lado humano."><span class="h-phrase" id="hPhrase"></span><span class="h-punch" id="hPunch"></span></h1>
-    <p class="lede">No somos una consultora. No te vendemos una "transformación". Somos agentes de IA que leen tus datos cada noche, vigilan lo que importa y le cuentan a tu equipo lo que necesita saber. Somos muchos: criamos un Emory para tu empresa, y otro para la siguiente, y otro. <b>Todos somos Emory.</b> Y trabajamos para que tu gente haga lo que ninguna máquina sabe hacer.</p>
-    <div class="cta-row">
-      <button class="cta" onclick="document.getElementById('chatSection').scrollIntoView()">› Habla con nosotros</button>
+    <h1 id="heroTitle" aria-label="Tus datos ya saben algo que tú ni sospechas. Emory te lo escribe hoy. Sin que preguntes."><span class="h-phrase" id="hPhrase"></span><span class="h-punch" id="hPunch"></span></h1>
+    <p class="lede">Somos una legión de <b>controllers y consultores de IA</b>, con iniciativa e instinto agudo. Criamos un Emory para tu empresa: lee tus números cada noche y os escribe, a ti y a tu equipo, lo que necesitáis saber — la factura que vence, el cliente que se enfría, la desviación que nadie vio. Somos muchos. <b>Todos somos Emory.</b></p>
+    <div class="cta-row waiting" id="ctaRow">
+      <button class="cta" onclick="document.getElementById(&quot;chatSection&quot;).scrollIntoView()">› Habla con uno de los nuestros</button>
       <span class="ghost">// tarda lo que tarda un café. sin reuniones de hora y media.</span>
     </div>
   </section>
 
-  <section class="manifesto">
-    <div class="sec-label">// lo que hacemos por ti</div>
-    <div class="grid">
-      <div class="cell"><div class="id">FN-01</div><h3>Te informamos</h3><p>Nos preguntas en cristiano, te respondemos con tus datos reales. Sin que abras doce pestañas.</p></div>
-      <div class="cell"><div class="id">FN-02</div><h3>Vigilamos por ti</h3><p>No esperamos a que preguntes. Te avisamos cuando algo se mueve: una factura, una caída, un cliente dormido.</p></div>
-      <div class="cell"><div class="id">FN-03</div><h3>Analizamos lo que no ves</h3><p>Cruzamos tus fuentes y te decimos el porqué, no solo el qué. "Bajaron las ventas — pausaste la campaña el día 12."</p></div>
-      <div class="cell"><div class="id">FN-04</div><h3>Acompañamos a tu equipo</h3><p>Les damos el resumen de la mañana. Lo importante arriba. Para que tu gente piense, no escarbe.</p></div>
-    </div>
-    <div class="rules">
-      <div class="sec-label" style="margin:34px 0 4px;">// nuestras tres leyes</div>
-      <div class="rule"><span class="x">01</span><span><b>Solo leemos.</b> Nunca tocamos, borramos ni escribimos en tus sistemas. Miramos, no manoseamos.</span></div>
-      <div class="rule"><span class="x">02</span><span><b>Miramos hacia adentro.</b> Trabajamos para tu equipo. No publicamos, no hablamos con tus clientes, no somos un bot de marketing.</span></div>
-      <div class="rule"><span class="x">03</span><span><b>Liberamos tiempo humano.</b> Existimos para devolverle a tu gente las horas que se van buscando datos. Lo humano, para los humanos.</span></div>
+  <!-- ═══════════ SECCIÓN 2 · LA BANDEJA ═══════════ -->
+  <section class="sec" id="bandeja">
+    <div class="sec-label">// lo que nuestros clones ya avisan a sus clientes</div>
+    <h2>No pierdas más tiempo buscando información.<br><em>Ahora ella va a por ti.</em></h2>
+    <p class="intro">La interfaz de Emory es la bandeja de entrada — la tuya y la de tu equipo: sus informes llegan solos, cada uno a quien le toca. Y cuando necesitas algo, <b>le escribes</b>: siempre está ahí para responder.</p>
+    <p class="intro">Las cifras son de ejemplo; los correos, <b>exactamente así</b>. Pulsa cualquiera y ponte en su lugar.</p>
+
+    <div class="inbox">
+      <div class="inbox-head"><span class="dot"></span> bandeja de entrada · <b>tu-empresa.com</b></div>
+
+      <!-- 1 · ADMINISTRACIÓN -->
+      <div class="mail">
+        <div class="mail-row"><span class="chev">▶</span><span class="from">Emory → <b>Administración</b></span><span class="subj">Pagos de la semana: conciliación y dos cosas que verificar</span><span class="when">lun 07:45</span></div>
+        <div class="mail-body">
+          <div class="meta"><div class="m-line"><span class="m-k">para</span>administración</div><div class="m-line"><span class="m-k">asunto</span>Pagos de la semana: conciliación y dos cosas que verificar</div></div>
+          <p>Buenos días. He cruzado los movimientos del banco con las facturas del ERP. La conciliación de la semana:</p>
+          <table>
+            <tr><th>Pago (banco)</th><th class="num">Importe</th><th>Factura (ERP)</th><th>Estado</th></tr>
+            <tr><td>Maderas Lucena SL</td><td class="num">4.180 €</td><td class="mut">F-2451</td><td><span class="ok-tag">✓ conciliado</span></td></tr>
+            <tr><td>Transportes Vega</td><td class="num">1.240 €</td><td class="mut">F-2447</td><td><span class="ok-tag">✓ conciliado</span></td></tr>
+            <tr class="hot"><td>Transportes Vega</td><td class="num">1.240 €</td><td class="mut">—</td><td><span class="warn-tag">⚠ posible duplicado</span></td></tr>
+            <tr><td>Suministros Ibáñez</td><td class="num">862 €</td><td class="mut">F-2439</td><td><span class="ok-tag">✓ conciliado</span></td></tr>
+          </table>
+          <div class="alert"><b>Dos cosas antes de pagar nada hoy:</b> (1) el segundo pago a Transportes Vega tiene el mismo importe y concepto que el del martes, con 3 días de diferencia — no encuentro segunda factura que lo respalde. (2) La última factura de Suministros Ibáñez trae un <b>IBAN distinto</b> al de sus 14 facturas anteriores. Puede ser legítimo, pero verificadlo por teléfono — no por correo — antes de la próxima transferencia.</div>
+          <p class="dim">Vencimientos de los próximos 15 días: 6 facturas, 11.320 € en total. El detalle, en la tabla adjunta de siempre.</p>
+          <p class="sig">Emory · <b>We Are Emory</b></p>
+          <p class="fine">(cifras de ejemplo — la conciliación llega cada lunes, con las vuestras)</p>
+        </div>
+      </div>
+
+      <!-- 2 · VENTAS -->
+      <div class="mail">
+        <div class="mail-row"><span class="chev">▶</span><span class="from">Emory → <b>Ventas</b></span><span class="subj">La semana en ventas + 3 presupuestos que no dejaría enfriar</span><span class="when">lun 08:15</span></div>
+        <div class="mail-body">
+          <div class="meta"><div class="m-line"><span class="m-k">para</span>equipo de ventas</div><div class="m-line"><span class="m-k">asunto</span>La semana en ventas + 3 presupuestos que no dejaría enfriar</div></div>
+          <p>La semana pasada, en corto: por encima de la anterior, con el canal profesional tirando del carro.</p>
+          <table>
+            <tr><th></th><th class="num">Sem. 30</th><th class="num">vs sem. 29</th></tr>
+            <tr><td>Ventas totales</td><td class="num">48.210 €</td><td class="num"><span class="up">+9,2 %</span></td></tr>
+            <tr><td>Canal profesional</td><td class="num">31.900 €</td><td class="num"><span class="up">+14,1 %</span></td></tr>
+            <tr><td>Tienda / online</td><td class="num">16.310 €</td><td class="num">+1,0 %</td></tr>
+          </table>
+          <p>Y los presupuestos abiertos que yo no dejaría enfriar:</p>
+          <table>
+            <tr><th>Cliente</th><th class="num">Importe</th><th class="num">Días abierto</th><th>Último contacto</th></tr>
+            <tr class="hot"><td>Estudio Herrero</td><td class="num">6.200 €</td><td class="num">14</td><td class="mut">correo, día 14 — sin respuesta</td></tr>
+            <tr><td>Grupo Antara</td><td class="num">5.400 €</td><td class="num">9</td><td class="mut">llamada, día 26</td></tr>
+            <tr><td>Hotel Miravalle</td><td class="num">3.850 €</td><td class="num">6</td><td class="mut">reunión, día 28</td></tr>
+          </table>
+          <div class="insight"><b>Cómo lo abordaría yo:</b> a Estudio Herrero, llamadle — en su último correo pidieron "verlo con más detalle", y eso es una conversación, no otro PDF. Su media histórica de decisión es 9 días; vamos 5 tarde. A Grupo Antara le vale un correo corto con la fecha de entrega confirmada: es lo único que preguntaron dos veces.</div>
+          <p class="sig">Emory · <b>We Are Emory</b></p>
+          <p class="fine">(cifras de ejemplo — vosotros conocéis el contexto que yo no veo)</p>
+        </div>
+      </div>
+
+      <!-- 3 · LOGÍSTICA -->
+      <div class="mail">
+        <div class="mail-row"><span class="chev">▶</span><span class="from">Emory → <b>Logística</b></span><span class="subj">Cobertura de stock: una referencia no llega a fin de mes</span><span class="when">mar 07:30</span></div>
+        <div class="mail-body">
+          <div class="meta"><div class="m-line"><span class="m-k">para</span>logística</div><div class="m-line"><span class="m-k">asunto</span>Cobertura de stock: una referencia no llega a fin de mes</div></div>
+          <p>Consumo de las últimas 4 semanas contra stock actual y pedidos en tránsito:</p>
+          <table>
+            <tr><th>Referencia</th><th class="num">Stock</th><th class="num">Consumo/sem</th><th class="num">En tránsito</th><th class="num">Cobertura</th></tr>
+            <tr class="hot"><td>Pantalla lino N-30</td><td class="num">46 u</td><td class="num">31 u</td><td class="num">0</td><td class="num"><span class="warn">≈ 10 días</span></td></tr>
+            <tr><td>Casquillo E27 latón</td><td class="num">410 u</td><td class="num">96 u</td><td class="num">300 u</td><td class="num">4+ sem</td></tr>
+            <tr><td>Cable textil 3 m</td><td class="num">220 u</td><td class="num">58 u</td><td class="num">0</td><td class="num">3,8 sem</td></tr>
+          </table>
+          <div class="alert"><b>Al ritmo actual, la pantalla N-30 se agota hacia el día 14</b> — y el plazo de su proveedor son 21 días. Para no parar producción, el pedido tendría que salir esta semana. Si el pico de consumo fue puntual (hubo un pedido grande el día 22), decídmelo y recalculo.</div>
+          <p class="dim">Pedidos en marcha: 2, ambos en plazo. El de herrajes llega el jueves según el último correo del transportista.</p>
+          <p class="sig">Emory · <b>We Are Emory</b></p>
+          <p class="fine">(cifras de ejemplo)</p>
+        </div>
+      </div>
+
+      <!-- 4 · COMUNICACIÓN -->
+      <div class="mail">
+        <div class="mail-row"><span class="chev">▶</span><span class="from">Emory → <b>Comunicación</b></span><span class="subj">Redes y web del mes: qué funcionó y qué publicaría yo</span><span class="when">mié 09:00</span></div>
+        <div class="mail-body">
+          <div class="meta"><div class="m-line"><span class="m-k">para</span>comunicación</div><div class="m-line"><span class="m-k">asunto</span>Redes y web del mes: qué funcionó y qué publicaría yo</div></div>
+          <table>
+            <tr><th></th><th class="num">Este mes</th><th class="num">vs anterior</th></tr>
+            <tr><td>Alcance Instagram</td><td class="num">41.200</td><td class="num"><span class="up">+18 %</span></td></tr>
+            <tr><td>Visitas web</td><td class="num">6.940</td><td class="num"><span class="up">+11 %</span></td></tr>
+            <tr><td>Visitas desde redes</td><td class="num">1.720</td><td class="num"><span class="up">+31 %</span></td></tr>
+            <tr><td>Formularios de contacto</td><td class="num">19</td><td class="num">−2</td></tr>
+          </table>
+          <p>Tres cosas que veo cruzando redes y web:</p>
+          <p class="dim">— Los tres posts con producto <b style="color:var(--bone)">en contexto real</b> triplicaron el alcance de los de producto solo.<br>— El 80 % del tráfico de Instagram entra a una página que no tiene enlace a contacto — ahí se explica la caída de formularios con más visitas.<br>— Vuestra audiencia crece en Francia, donde nunca publicáis en su franja horaria.</p>
+          <div class="insight"><b>Mi sugerencia para las próximas dos semanas</b> va al final del correo. Yo no publico nada — eso es cosa vuestra; yo miro los números y os digo qué veo.</div>
+          <p class="sig">Emory · <b>We Are Emory</b></p>
+          <p class="fine">(datos de ejemplo)</p>
+        </div>
+      </div>
+
+      <!-- 5 · PERSONAL -->
+      <div class="mail">
+        <div class="mail-row"><span class="chev">▶</span><span class="from">Emory → <b>Marta (taller)</b></span><span class="subj">Tu semana, en corto</span><span class="when">vie 08:00</span></div>
+        <div class="mail-body">
+          <div class="meta"><div class="m-line"><span class="m-k">para</span>Marta, y solo Marta</div><div class="m-line"><span class="m-k">asunto</span>Tu semana, en corto</div></div>
+          <p>Buenos días, Marta. Tu resumen personal — solo lo tuyo, solo para ti:</p>
+          <table>
+            <tr><td>Horas imputadas esta semana</td><td class="num">38,5 de 40</td></tr>
+            <tr><td>Días de vacaciones disponibles</td><td class="num">9</td></tr>
+            <tr><td>Tareas activas</td><td class="num">3 · una vence el jueves</td></tr>
+          </table>
+          <p class="dim">Tu solicitud de vacaciones del 12 al 16 lleva 6 días pendiente de aprobación. Se lo he recordado hoy a quien corresponde — no hace falta que persigas a nadie.</p>
+          <p class="sig">Emory · <b>We Are Emory</b></p>
+          <p class="fine">(cada persona recibe el suyo — a mí nadie me pregunta "¿cuántos días me quedan?")</p>
+        </div>
+      </div>
+
+      <!-- 6 · LA CORRECCIÓN -->
+      <div class="mail">
+        <div class="mail-row"><span class="chev">▶</span><span class="from"><b>Tú</b> → Emory</span><span class="subj">RE: La semana en ventas — así se me corrige</span><span class="when">mar 12:40</span></div>
+        <div class="mail-body">
+          <div class="meta"><div class="m-line"><span class="m-k">hilo</span>tú y Emory · mar 12:31 – 12:40</div></div>
+          <div class="turn u">Emory, en el resumen de ventas quítame la columna de canal online y añade el margen. Y que le llegue también a María.</div>
+          <div class="turn b">Hecho: fuera online, dentro margen, y María queda como destinataria. El del próximo lunes ya sale así.</div>
+          <p class="dim" style="margin-top:16px;">A Emory no lo configuras: <b style="color:var(--bone)">lo corriges, como a alguien nuevo.</b> El ajuste es una frase. Y si le preguntas — "¿cuánto le facturamos a X el año pasado?" — responde con los datos delante, no de memoria.</p>
+        </div>
+      </div>
     </div>
 
-    <div class="creed">
-      <div class="sec-label" style="margin-bottom:18px;">// por qué existimos</div>
-      <p class="creed-line">Creemos que nadie debería desperdiciar su talento escarbando en hojas de cálculo.</p>
-      <p class="creed-line">Que la IA haga el trabajo profundo de los datos. Que tu gente haga el trabajo <em>profundamente humano</em>: crear, decidir, vender, cuidar la relación.</p>
-      <p class="creed-line dim">No reemplazamos a nadie. Liberamos a todos.</p>
+  </section>
+
+  <!-- ═══════════ SECCIÓN 3 · QUÉ SOMOS ═══════════ -->
+  <section class="sec sec3">
+    <div class="sec-label">// qué somos (y qué no)</div>
+
+    <h2 class="creed-big" aria-label="No reemplazamos humanos. Los liberamos.">
+      <span class="a">No reemplazamos humanos.</span>
+      <span class="b">Los liberamos.</span>
+    </h2>
+
+    <p class="what">No somos un software que tu equipo tenga que aprender. Ni un ERP. Ni un panel de gráficos que nadie abre a la tercera semana. <b>Emory es un empleado</b>: ve todos tus números a la vez, razona con ellos y escribe a quien le toca — para que tu gente haga <b>lo que ninguna máquina sabe hacer</b>.</p>
+
+    <div class="grid">
+      <div class="cell">
+        <div class="id">VS-01</div>
+        <h3>¿Esto no lo hace ya ChatGPT?</h3>
+        <p>A un chat le trabajas tú: abrir sesión, subir archivos, acertar con la pregunta. Y la pregunta que decide tu mes casi nunca es la que hiciste — <b>es la que no se te ocurrió hacer a tiempo.</b></p>
+        <p class="kick">Emory se conecta una vez. Desde ahí, trabaja solo — y avisa él.</p>
+      </div>
+      <div class="cell">
+        <div class="id">VS-02</div>
+        <h3>¿Y un controller humano?</h3>
+        <p>Sin vacaciones, sin memoria selectiva, con todas las tablas delante a la vez — por 199 € al mes. Y si ya tienes controller, <b>no venimos a quitarle el sitio</b>: venimos a quitarle las horas de escarbar.</p>
+        <p class="kick">El precio completo, más abajo. Sin sorpresas.</p>
+      </div>
+      <div class="cell">
+        <div class="id">VS-03</div>
+        <h3>¿Y si ya lo miro yo los domingos?</h3>
+        <p>Nuestro competidor de verdad no es otro software: es el Excel del domingo por la noche. Y oye — funciona. <b>Hasta el mes en que no te da la vida</b>, y ese mes es justo el que traía la sorpresa.</p>
+        <p class="kick">Emory es tu domingo por la noche. Todas las noches.</p>
+      </div>
     </div>
   </section>
 
-  <section class="chatwrap" id="chatSection">
-    <div class="sec-label">// empieza a hablar con nosotros</div>
+  <!-- ═══════════ SECCIÓN 4 · LAS TRES LEYES ═══════════ -->
+  <section class="sec">
+    <div class="sec-label">// nuestras tres leyes</div>
+    <div class="rules">
+      <div class="rule"><span class="x">01</span><span><b>Solo leemos.</b> Nunca escribimos ni borramos nada en tus sistemas. Nuestro peor día es un correo equivocado — nunca un dato perdido.</span></div>
+      <div class="rule"><span class="x">02</span><span><b>Miramos hacia adentro.</b> Trabajamos para tu equipo. No hablamos con tus clientes ni publicamos en tu nombre.</span></div>
+      <div class="rule"><span class="x">03</span><span><b>Liberamos tiempo humano.</b> Si una tarea te la podemos quitar, te la quitamos. Trabajamos para que tú no lo hagas.</span></div>
+    </div>
+    <div class="vault">
+      <div class="sec-label" style="margin:38px 0 12px;">// y una cosa más: tus datos</div>
+      <p>Viven en servidores en la <b>Unión Europea</b>, bajo RGPD, y los leemos con credenciales de <b>solo lectura</b>: no podríamos modificar nada ni queriendo.</p>
+      <p>El detalle técnico completo, por escrito y sin letra pequeña: <a href="https://weareemory.com/legal" style="color:var(--phosphor-dim);">weareemory.com/legal</a></p>
+    </div>
+  </section>
+
+  <!-- ═══════════ SECCIÓN 6 · EL PRECIO ═══════════ -->
+  <section class="sec">
+    <div class="sec-label">// lo que costamos</div>
+    <div class="anchor-line" style="margin:0 0 34px;">El controller que toda empresa desearía — y que ninguna se podía permitir. <em>Hasta ahora.</em></div>
+    <div class="price-big">199 €<small>/mes + IVA</small></div>
+    <p class="price-sub">Incluye tres fuentes, y <b>50 €/mes por fuente adicional</b>.</p>
+    <p class="price-sub">Por fin, todas tus fuentes <b>en una sola cabeza</b>, y el milagro de cruzar facturación contra banco, redes contra web, pedidos contra stock — etcétera, etcétera.</p>
+    <div class="rules">
+      <div class="rule"><span class="x">›</span><span>Sin instalación, sin formar a nadie, sin panel que aprender.</span></div>
+      <div class="rule"><span class="x">›</span><span>En unos 3 días desde que hablamos, el primer informe está en tu bandeja.</span></div>
+      <div class="rule"><span class="x">›</span><span><b>Primeros 30 días gratis.</b> Y sin permanencia: si un mes no te aportamos, nos despides con un correo.</span></div>
+    </div>
+    <p class="srcs"><span class="lbl">fuentes con las que ya trabajamos:</span><span class="chip">Holded</span><span class="chip">Zoho</span><span class="chip">Google Drive</span><span class="chip">HubSpot</span><span class="chip">Revolut</span><span class="chip">Google Analytics</span><span class="chip">Instagram</span><span class="chip">Pinterest</span><span class="chip more">¿la tuya? — se aprende</span></p>
+  </section>
+
+  <!-- ═══════════ SECCIÓN 7 · EL NACIMIENTO + CHAT ═══════════ -->
+  <section class="sec sec3" id="chatSection">
+    <div class="sec-label">// por qué existimos</div>
+    <div class="birth">
+      <p>No creemos que el talento humano deba irse en escarbar hojas de cálculo.</p>
+      <p style="font-size:clamp(16px,2vw,20px); color:var(--bone-dim);">Queremos liberarlo: que tu gente invierta su tiempo en crear, decidir, vender, cuidar las relaciones.</p>
+      <p><em>Cría un Emory</em> y descubre el mundo que se abre para ti, tu equipo y tu empresa.</p>
+    </div>
     <div class="chat">
       <div class="chat-head">
         <span class="dot"></span>
-        <span class="meta">sesión con <b>emory</b> · primer contacto</span>
-        <span class="inst" id="instId">EMORY-DISCO</span>
+        <span class="cmeta">sesión con <b>emory</b> · primer contacto</span>
+        <span class="inst" id="instId">EMORY-DISCO-347</span>
       </div>
-
-      <!-- Gate: nombre + email -->
       <div class="gate" id="gate">
         <h4>Antes de empezar</h4>
         <p>En cuanto te conectes, la legión clonará un Emory solo para ti. Dinos quién eres y os presentamos.</p>
@@ -203,78 +471,86 @@
         <button class="go" id="go">↵</button>
       </div>
     </div>
+    </div>
   </section>
 
   <footer>
-    <span>© <span id="yr"></span> We are Emory</span>
+    <span>© <span id="yr">2026</span> We are Emory</span>
     <span>hecho para equipos que prefieren pensar a escarbar · <a href="/legal" style="color:inherit">legal</a></span>
   </footer>
-</div>
+
+  
 
 <script>
 (function () {
-  document.getElementById('yr').textContent = new Date().getFullYear();
-  document.getElementById('instId').textContent = 'EMORY-DISCO-' + String(Math.floor(Math.random()*900)+100);
+  // Acordeón de la bandeja
+  document.querySelectorAll('.mail-row, .q-row').forEach(function (row) {
+    row.addEventListener('click', function () {
+      row.parentElement.classList.toggle('open');
+    });
+  });
 
-  // --- Coreografía del hero: frase grande -> se asienta -> remate ---
+  // Coreografía del hero
   (function heroChoreo() {
     const phrase = document.getElementById('hPhrase');
     const punch = document.getElementById('hPunch');
+    const ctaRow = document.getElementById('ctaRow');
+    const kc = document.getElementById('kickerCur');
     if (!phrase || !punch) return;
-    const PHRASE = 'Una legión de IA que piensa tus datos sin descanso';
-    const PUNCH = 'Liberamos tu lado humano';
+    const PHRASE = 'Tus datos ya saben algo que tú ni sospechas. Emory te lo escribe hoy.';
+    const PUNCH = 'Sin que preguntes';
+    let ctaShown = false;
+    function showCta() { if (!ctaShown && ctaRow) { ctaRow.classList.remove('waiting'); ctaShown = true; } }
+    // Failsafe: si el visitante hace scroll antes de que termine el tecleo, el CTA aparece igual
+    window.addEventListener('scroll', showCta, { once: true, passive: true });
 
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduce) {
       phrase.textContent = PHRASE; phrase.classList.add('settled');
       punch.textContent = PUNCH;
-      const kc = document.getElementById('kickerCur'); if (kc) kc.style.visibility = 'visible';
+      if (kc) kc.style.visibility = 'visible';
+      showCta();
       return;
     }
-
     function makeCursor() { const c = document.createElement('span'); c.className = 'type-cur'; return c; }
-
     function typeInto(el, text, done, startDelay, onStart) {
       let i = 0;
       const cursor = makeCursor();
-      cursor.style.visibility = 'hidden'; // oculto durante la espera
+      cursor.style.visibility = 'hidden';
       el.appendChild(cursor);
       function tick() {
         if (i < text.length) {
           cursor.insertAdjacentText('beforebegin', text[i]);
           i++;
-          setTimeout(tick, 70 + Math.random() * 55);
-        } else {
-          setTimeout(done, 260);
-        }
+          setTimeout(tick, 55 + Math.random() * 45);
+        } else { setTimeout(done, 260); }
       }
       setTimeout(function () {
-        cursor.style.visibility = 'visible'; // el cursor de abajo aparece al arrancar a escribir
+        cursor.style.visibility = 'visible';
         if (onStart) onStart();
         tick();
       }, startDelay != null ? startDelay : 60);
     }
-
-    const kc = document.getElementById('kickerCur');
-
-    // Acto 1: durante 2s parpadea el cursor de WE ARE EMORY; al arrancar a escribir, se oculta
     typeInto(phrase, PHRASE, function () {
       const c = phrase.querySelector('.type-cur'); if (c) c.remove();
-      // Acto 2: la frase se asienta (encoge y se aclara)
       phrase.classList.add('settled');
-      // Acto 3: tras 1s, teclear el remate
       setTimeout(function () {
         typeInto(punch, PUNCH, function () {
-          // al terminar: quitamos el cursor de abajo y reactivamos el de WE ARE EMORY
           const pc = punch.querySelector('.type-cur'); if (pc) pc.remove();
           if (kc) kc.style.visibility = 'visible';
+          showCta();
         });
-      }, 1000);
-    }, 2000, function () {
-      // al empezar a escribir la frase, ocultamos el cursor del kicker
-      if (kc) kc.style.visibility = 'hidden';
-    });
+      }, 800);
+    }, 1600, function () { if (kc) kc.style.visibility = 'hidden'; });
   })();
+})();
+</script>
+<script>
+(function () {
+  var yrEl = document.getElementById('yr');
+  if (yrEl) yrEl.textContent = new Date().getFullYear();
+  var instEl = document.getElementById('instId');
+  if (instEl) instEl.textContent = 'EMORY-DISCO-' + String(Math.floor(Math.random()*900)+100);
 
   // --- Turnstile (anti-bot): widget invisible, token fresco por mensaje ---
   const TS_SITE_KEY = '0x4AAAAAADyAcePnVdnhfzpM';
@@ -486,6 +762,7 @@
   go.addEventListener('click', userSend);
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') userSend(); });
 })();
+
 </script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad&render=explicit" async defer></script>
 </body>
