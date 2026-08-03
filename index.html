@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- build: home-v5-produccion · 03-08-2026 -->
+<!-- build: home-v7-camara · 03-08-2026 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -224,6 +224,24 @@
   .foot .go:hover { background: #d4ff52; }
   .foot .go:disabled { opacity: .4; cursor: not-allowed; }
   .privacy a { color: var(--phosphor-dim); }
+
+  /* ---- la cámara de clonación (cierre) ---- */
+  .portal { text-align: left; margin: 6px 0 40px; }
+  .portal-kicker { font-size: 13px; color: var(--bone-dim); letter-spacing: .04em; margin-bottom: 18px; }
+  .portal-kicker b { font-weight: 400; color: var(--bone); }
+  .portal-kicker .sp { color: var(--amber); animation: blink 1.4s steps(1) infinite; }
+  .portal-big { font-family: 'Syne', sans-serif; font-weight: 800; letter-spacing: -.02em; line-height: 1.02; font-size: clamp(38px, 7vw, 78px); color: var(--bone); margin-bottom: 18px; }
+  .portal-big em { font-style: normal; color: var(--phosphor); text-shadow: 0 0 34px rgba(196,240,66,.45); }
+  .portal-sub { font-size: 16px; color: var(--bone-dim); max-width: 520px; }
+  .chat.camara { animation: breathe 3.2s ease-in-out infinite; }
+  @keyframes breathe {
+    0%,100% { box-shadow: 0 0 40px rgba(0,0,0,.4), 0 0 26px rgba(196,240,66,.10); border-color: var(--line); }
+    50% { box-shadow: 0 0 40px rgba(0,0,0,.4), 0 0 52px rgba(196,240,66,.26); border-color: var(--phosphor-dim); }
+  }
+  @media (prefers-reduced-motion: reduce) { .chat.camara { animation: none; box-shadow: 0 0 40px rgba(0,0,0,.4), 0 0 34px rgba(196,240,66,.16); } .portal-kicker .sp { animation: none; } }
+  .camara-foot { margin-top: 16px; font-size: 12.5px; color: var(--bone-dim); }
+  .bar .stat a { color: inherit; text-decoration: none; }
+  .bar .stat .sp { color: var(--amber); animation: blink 1.4s steps(1) infinite; }
 </style>
 </head>
 <body>
@@ -231,7 +249,7 @@
   <div class="bar">
     <span class="dot"></span>
     <span class="path">~/emory/instances/ — all systems nominal</span>
-    <span class="stat">[ 3 active · 1 spawning ]</span>
+    <span class="stat"><a href="#chatSection">[ 3 active · <span class="sp">1 spawning</span> ]</a></span>
   </div>
 
   <!-- ═══════════ SECCIÓN 1 · HERO ═══════════ -->
@@ -439,17 +457,22 @@
     <div class="birth">
       <p>No creemos que el talento humano deba irse en escarbar hojas de cálculo.</p>
       <p style="font-size:clamp(16px,2vw,20px); color:var(--bone-dim);">Queremos liberarlo: que tu gente invierta su tiempo en crear, decidir, vender, cuidar las relaciones.</p>
-      <p><em>Cría un Emory</em> y descubre el mundo que se abre para ti, tu equipo y tu empresa.</p>
     </div>
-    <div class="chat">
+
+    <div class="sec-label" style="margin-top:46px;">// la cámara de clonación</div>
+    <div class="portal">
+      <p class="portal-kicker"><b>[ <span class="sp">1 spawning</span> ]</b></p>
+      <h2 class="portal-big">El que está naciendo<br><em>es el tuyo.</em></h2>
+    </div>
+    <div class="chat camara">
       <div class="chat-head">
         <span class="dot"></span>
-        <span class="cmeta">sesión con <b>emory</b> · primer contacto</span>
+        <span class="cmeta">cámara de clonación · <b>esperando a comenzar a trabajar</b></span>
         <span class="inst" id="instId">EMORY-DISCO-347</span>
       </div>
       <div class="gate" id="gate">
-        <h4>Antes de empezar</h4>
-        <p>En cuanto te conectes, la legión clonará un Emory solo para ti. Dinos quién eres y os presentamos.</p>
+        <h4>Ficha de clonación</h4>
+        <p>Dos datos y la legión clona un Emory solo para ti — único, tuyo, con tu empresa en la cabeza desde el primer mensaje.</p>
         <div class="field">
           <label>Tu nombre</label>
           <input id="fName" type="text" placeholder="Cómo te llamas" autocomplete="name">
@@ -459,7 +482,7 @@
           <input id="fEmail" type="email" placeholder="tu@empresa.com" autocomplete="email">
         </div>
         <div class="gate-err" id="gateErr"></div>
-        <button class="cta" id="gateGo">› Conéctate con tu Emory</button>
+        <button class="cta" id="gateGo">› Despierta a tu Emory</button>
         <p class="privacy">Usaremos tu nombre y correo solo para esta conversación y para enviarte una propuesta. No compartimos tus datos. Protegido por Cloudflare Turnstile. <span id="ctxNote"></span></p>
       </div>
 
